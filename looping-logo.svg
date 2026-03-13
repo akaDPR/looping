@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="400" height="200">
+  <defs>
+    <linearGradient id="loopGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c6aef"/>
+      <stop offset="100%" stop-color="#2dd4a8"/>
+    </linearGradient>
+    <linearGradient id="loopGrad2" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#7c6aef"/>
+      <stop offset="100%" stop-color="#2dd4a8"/>
+    </linearGradient>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@800&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- Infinity loop icon -->
+  <g transform="translate(200, 72)">
+    <!-- Infinity symbol made from two overlapping ellipses -->
+    <path d="M0,-28 C16,-28 28,-16 28,0 C28,16 16,28 0,28 C-16,28 -28,16 -28,0 C-28,-16 -16,-28 0,-28"
+          transform="translate(-24, 0)"
+          fill="none" stroke="url(#loopGrad)" stroke-width="5.5" stroke-linecap="round"/>
+    <path d="M0,-28 C16,-28 28,-16 28,0 C28,16 16,28 0,28 C-16,28 -28,16 -28,0 C-28,-16 -16,-28 0,-28"
+          transform="translate(24, 0)"
+          fill="none" stroke="url(#loopGrad2)" stroke-width="5.5" stroke-linecap="round"/>
+
+    <!-- Center overlap glow dot -->
+    <circle cx="0" cy="0" r="5" fill="#9d8ffa" opacity="0.9"/>
+
+    <!-- Small accent dots at the outer edges -->
+    <circle cx="-52" cy="0" r="3.5" fill="#7c6aef"/>
+    <circle cx="52" cy="0" r="3.5" fill="#2dd4a8"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="200" y="155"
+        font-family="'Outfit', sans-serif"
+        font-weight="800"
+        font-size="48"
+        fill="#eeedf5"
+        text-anchor="middle"
+        letter-spacing="-2">looping</text>
+
+  <!-- Subtle tagline -->
+  <text x="200" y="180"
+        font-family="'Outfit', sans-serif"
+        font-weight="500"
+        font-size="12"
+        fill="#8a86a0"
+        text-anchor="middle"
+        letter-spacing="4"
+        text-transform="uppercase">CONNECT NEARBY</text>
+</svg>

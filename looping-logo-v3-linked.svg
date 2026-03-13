@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="400" height="200">
+  <defs>
+    <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c6aef"/>
+      <stop offset="100%" stop-color="#2dd4a8"/>
+    </linearGradient>
+    <linearGradient id="lg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9d8ffa"/>
+      <stop offset="100%" stop-color="#7c6aef"/>
+    </linearGradient>
+    <linearGradient id="lg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2dd4a8"/>
+      <stop offset="100%" stop-color="#0d9488"/>
+    </linearGradient>
+    <filter id="glow3">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@800&amp;display=swap');</style>
+  </defs>
+
+  <g transform="translate(200, 66)">
+    <!-- Two linked chain loops -->
+    <!-- Left loop -->
+    <rect x="-42" y="-18" width="38" height="36" rx="18" fill="none" stroke="url(#lg2)" stroke-width="5" filter="url(#glow3)"/>
+    <!-- Right loop - interlocked -->
+    <rect x="4" y="-18" width="38" height="36" rx="18" fill="none" stroke="url(#lg3)" stroke-width="5" filter="url(#glow3)"/>
+
+    <!-- Connection spark at interlock point -->
+    <circle cx="10" cy="-6" r="2.5" fill="white" opacity="0.9"/>
+    <circle cx="10" cy="6" r="2" fill="white" opacity="0.7"/>
+    <line x1="6" y1="0" x2="14" y2="0" stroke="white" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="200" y="148" font-family="'Outfit', sans-serif" font-weight="800" font-size="44" fill="#eeedf5" text-anchor="middle" letter-spacing="-2">looping</text>
+  <text x="200" y="174" font-family="'Outfit', sans-serif" font-weight="500" font-size="11" fill="#8a86a0" text-anchor="middle" letter-spacing="4">CONNECT NEARBY</text>
+</svg>

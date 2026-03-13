@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Looping — Flow Demos</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #f2f3f5;
+    --phone-bg: #ffffff;
+    --surface: #f2f3f5;
+    --surface-light: #f8f9fa;
+    --accent: #c9f158;
+    --accent-glow: rgba(201, 241, 88, 0.35);
+    --teal: #c9f158;
+    --dark: #202020;
+    --text-primary: #202020;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --input-border: #e5e7eb;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--phone-bg);
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .flow-container { display: none; position: absolute; inset: 0; }
+  .flow-container.active { display: block; }
+
+  /* Screen transition system */
+  .demo-screen {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+    background: var(--phone-bg);
+  }
+  .demo-screen.active {
+    opacity: 1; transform: translateX(0);
+    pointer-events: auto;
+  }
+  .demo-screen.exit {
+    opacity: 0; transform: translateX(-30px);
+  }
+
+  /* ===== SHARED CALL STYLES ===== */
+  .call-center {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding-top: 54px;
+  }
+
+  .call-avatar {
+    width: 96px; height: 96px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; font-weight: 700; color: var(--white);
+    position: relative; margin-bottom: 20px;
+    background: linear-gradient(135deg, #f472b6, #ec4899);
+  }
+
+  .call-avatar-pulse {
+    position: absolute; inset: -8px;
+    border-radius: 50%;
+    border: 2px solid rgba(244, 114, 182, 0.4);
+    opacity: 0;
+    animation: callPulse 2s ease-out infinite;
+  }
+  .call-avatar-pulse:nth-child(2) { animation-delay: 0.7s; }
+  .call-avatar-pulse:nth-child(3) { animation-delay: 1.4s; }
+
+  @keyframes callPulse {
+    0% { transform: scale(0.9); opacity: 0.6; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+
+  @keyframes avatarRing {
+    0%, 100% { transform: scale(1); }
+    10% { transform: scale(1.06); }
+    20% { transform: scale(1); }
+    30% { transform: scale(1.06); }
+    40% { transform: scale(1); }
+  }
+
+  .avatar-ring { animation: avatarRing 2s ease-in-out infinite; }
+
+  .caller-name {
+    font-size: 28px; font-weight: 700;
+    color: var(--text-primary); letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+
+  .call-status {
+    font-size: 14px; color: var(--text-secondary);
+    font-weight: 500; margin-bottom: 40px;
+  }
+
+  .call-timer {
+    font-size: 18px; font-weight: 600;
+    color: var(--accent); letter-spacing: 1px;
+    margin-bottom: 32px;
+  }
+
+  /* Action buttons */
+  .action-row {
+    display: flex; align-items: flex-start;
+    gap: 48px; margin-bottom: 60px;
+  }
+
+  .action-item {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 8px;
+  }
+
+  .action-label {
+    font-size: 12px; color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .action-btn {
+    width: 64px; height: 64px;
+    border-radius: 50%; border: none;
+    display: flex; align-items: center; justify-content: center;
+    cursor: default;
+  }
+
+  .action-btn svg {
+    width: 28px; height: 28px;
+    fill: none; stroke: var(--white);
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  .action-btn.accept { background: #34C759; box-shadow: 0 4px 20px rgba(52,199,89,0.4); }
+  .action-btn.decline { background: #FF3B30; box-shadow: 0 4px 20px rgba(255,59,48,0.4); }
+  .action-btn.end { background: #FF3B30; box-shadow: 0 4px 20px rgba(255,59,48,0.4); width: 72px; height: 72px; }
+  .action-btn.end svg { width: 32px; height: 32px; }
+
+  /* Control grid */
+  .ctrl-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px; width: 260px; margin-bottom: 28px;
+  }
+
+  .ctrl-item {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 6px;
+  }
+
+  .ctrl-circle {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--input-border);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+
+  .ctrl-circle svg {
+    width: 22px; height: 22px;
+    fill: none; stroke: var(--text-primary);
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  .ctrl-text {
+    font-size: 11px; color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .ctrl-item.active .ctrl-circle {
+    background: var(--dark); border-color: var(--dark);
+  }
+  .ctrl-item.active .ctrl-circle svg { stroke: var(--white); }
+  .ctrl-item.active .ctrl-text { color: var(--text-primary); font-weight: 600; }
+
+  /* Ended card */
+  .ended-card {
+    width: 300px;
+    background: var(--white);
+    border: 1px solid var(--input-border);
+    border-radius: 20px;
+    padding: 36px 28px 28px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    opacity: 0; transform: scale(0.9);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ended-card.reveal { opacity: 1; transform: scale(1); }
+
+  .ended-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%; margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .ended-icon svg {
+    width: 28px; height: 28px;
+    fill: none; stroke: var(--white);
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  .ended-title {
+    font-size: 22px; font-weight: 700;
+    color: var(--text-primary); letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+
+  .ended-duration {
+    font-size: 14px; color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+
+  .ended-actions { display: flex; gap: 10px; }
+
+  .ended-btn {
+    flex: 1; height: 48px; border: none; border-radius: 14px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px; font-weight: 600;
+    cursor: default;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+
+  .ended-btn svg {
+    width: 18px; height: 18px;
+    fill: none; stroke-width: 2;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  .ended-btn.primary { background: var(--dark); color: var(--white); }
+  .ended-btn.primary svg { stroke: var(--white); }
+  .ended-btn.secondary { background: var(--surface); color: var(--text-primary); border: 1px solid var(--input-border); }
+  .ended-btn.secondary svg { stroke: var(--text-primary); }
+
+  /* ===== VIDEO CALL STYLES ===== */
+  .demo-screen.video-screen { background: #1a1a1a; }
+
+  .video-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, #0f0f0f 0%, #1a1a2e 40%, #16213e 70%, #0f0f0f 100%);
+    overflow: hidden;
+  }
+
+  .video-bg-blur {
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(244,114,182,0.15), rgba(236,72,153,0.1));
+    filter: blur(60px);
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .video-bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .video-bg-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 30%, transparent 60%, rgba(0,0,0,0.7) 100%);
+  }
+
+  .video-center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 10;
+  }
+
+  .video-center .caller-name { color: #fff; text-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+  .video-center .call-status { color: rgba(255,255,255,0.55); }
+  .video-center .call-timer { color: rgba(255,255,255,0.5); }
+
+  .video-encrypted {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 14px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.08);
+    position: absolute; top: 62px;
+    left: 50%; transform: translateX(-50%);
+    z-index: 15;
+  }
+
+  .video-encrypted svg {
+    width: 12px; height: 12px;
+    fill: none; stroke: #34C759;
+    stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  .video-encrypted span {
+    font-size: 11px; color: rgba(255,255,255,0.7);
+    font-weight: 500;
+  }
+
+  .video-pip {
+    position: absolute; top: 62px; right: 16px;
+    width: 96px; height: 132px;
+    border-radius: 16px;
+    background: linear-gradient(160deg, #2a2a3e, #1a1a2e);
+    border: 2px solid rgba(255,255,255,0.12);
+    z-index: 20;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    overflow: hidden;
+  }
+
+  .pip-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700; color: var(--dark);
+  }
+
+  .pip-label {
+    position: absolute; bottom: 6px; left: 0; right: 0;
+    text-align: center;
+    font-size: 9px; color: rgba(255,255,255,0.7);
+    font-weight: 600; letter-spacing: 0.3px;
+  }
+
+  .video-action-row {
+    position: absolute; bottom: 80px; left: 0; right: 0;
+    display: flex; align-items: flex-start;
+    justify-content: center; gap: 64px; z-index: 15;
+  }
+
+  .video-action-row .action-label { color: rgba(255,255,255,0.7); }
+
+  .video-hint {
+    position: absolute; bottom: 28px; left: 0; right: 0;
+    text-align: center; font-size: 11px;
+    color: rgba(255,255,255,0.3); letter-spacing: 0.3px;
+    z-index: 15;
+  }
+
+  .video-looping-badge {
+    display: flex; align-items: center; gap: 6px;
+    position: absolute; z-index: 15;
+    bottom: 120px; left: 50%; transform: translateX(-50%);
+  }
+
+  .video-looping-badge .green-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #34C759; box-shadow: 0 0 8px rgba(52,199,89,0.5);
+  }
+
+  .video-looping-badge span {
+    font-size: 12px; color: rgba(255,255,255,0.45);
+    font-weight: 500;
+  }
+
+  /* Video controls bar */
+  .video-bar {
+    position: absolute;
+    bottom: 36px; left: 16px; right: 16px;
+    display: flex; align-items: center;
+    justify-content: space-around;
+    padding: 12px 8px;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 24px; z-index: 20;
+  }
+
+  .video-ctrl {
+    width: 48px; height: 48px;
+    border-radius: 50%; border: none;
+    background: rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    cursor: default;
+  }
+
+  .video-ctrl svg {
+    width: 22px; height: 22px;
+    fill: none; stroke: #fff;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  .video-ctrl.end-btn { background: #FF3B30; width: 56px; height: 56px; }
+  .video-ctrl.end-btn svg { width: 26px; height: 26px; }
+
+  /* Video header overlay */
+  .video-header {
+    position: absolute; top: 54px;
+    left: 0; right: 0;
+    text-align: center; z-index: 15;
+    padding-top: 10px;
+  }
+
+  .video-header .vname {
+    font-size: 22px; font-weight: 700;
+    color: #fff; letter-spacing: -0.3px;
+  }
+
+  .video-header .vstatus {
+    font-size: 13px; color: rgba(255,255,255,0.6);
+    font-weight: 500; margin-top: 2px;
+  }
+
+  /* ===== SCREENSHOT STYLES ===== */
+  .ss-screen { padding-top: 54px; background: var(--phone-bg); }
+
+  .ss-header {
+    padding: 16px 22px 12px;
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .ss-back {
+    width: 32px; height: 32px;
+    background: var(--surface); border: 1px solid var(--input-border);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .ss-back svg {
+    width: 22px; height: 22px; fill: none;
+    stroke: var(--dark); stroke-width: 2.5;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  .ss-title {
+    font-size: 20px; font-weight: 700;
+    color: var(--text-primary); letter-spacing: -0.3px;
+  }
+
+  .ss-step { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
+
+  .ss-hero {
+    display: flex; flex-direction: column;
+    align-items: center; padding: 24px 0 20px;
+    opacity: 0; transform: translateY(15px);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ss-hero.reveal { opacity: 1; transform: translateY(0); }
+
+  .ss-shield {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: rgba(255, 59, 48, 0.1);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px; position: relative;
+  }
+
+  .ss-shield svg {
+    width: 36px; height: 36px; fill: none;
+    stroke: #FF3B30; stroke-width: 2;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  .ss-shield .check {
+    position: absolute; bottom: 2px; right: 2px;
+    width: 24px; height: 24px;
+    background: #34C759; border: 3px solid var(--phone-bg);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .ss-shield .check svg {
+    width: 12px; height: 12px; stroke: var(--white); stroke-width: 3;
+  }
+
+  .ss-hero-title {
+    font-size: 20px; font-weight: 700;
+    color: var(--text-primary); letter-spacing: -0.3px;
+    margin-bottom: 4px;
+  }
+
+  .ss-hero-desc {
+    font-size: 13px; color: var(--text-secondary);
+    text-align: center; line-height: 1.4;
+    padding: 0 32px;
+  }
+
+  .ss-body {
+    flex: 1; overflow-y: auto;
+    padding: 0 16px 16px;
+  }
+
+  .ss-card {
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 16px; margin-bottom: 12px;
+  }
+
+  .ss-card-title {
+    font-size: 13px; font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+
+  .ss-toggle-row {
+    display: flex; align-items: center;
+    justify-content: space-between;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--input-border);
+    opacity: 0; transform: translateX(20px);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ss-toggle-row:last-of-type { border-bottom: none; }
+  .ss-toggle-row.reveal { opacity: 1; transform: translateX(0); }
+
+  .ss-toggle-label {
+    font-size: 15px; font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .ss-toggle-sub {
+    font-size: 12px; color: var(--text-muted); margin-top: 2px;
+  }
+
+  .ss-switch {
+    width: 51px; height: 31px;
+    border-radius: 16px;
+    background: rgba(120,120,128,0.32);
+    position: relative; flex-shrink: 0;
+    transition: background 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .ss-switch::after {
+    content: '';
+    position: absolute; top: 2px; left: 2px;
+    width: 27px; height: 27px;
+    border-radius: 50%; background: var(--white);
+    transition: left 0.3s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  }
+
+  .ss-switch.on { background: #34C759; }
+  .ss-switch.on::after { left: 22px; }
+
+  .ss-badge {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px;
+    background: rgba(255,59,48,0.08);
+    border: 1px solid rgba(255,59,48,0.1);
+    border-radius: 14px; margin-bottom: 14px;
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ss-badge.reveal { opacity: 1; transform: translateY(0); }
+
+  .ss-badge-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: rgba(255,59,48,0.12);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .ss-badge-icon svg {
+    width: 18px; height: 18px; fill: none;
+    stroke: #FF3B30; stroke-width: 2;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  .ss-badge-text {
+    font-size: 12px; color: #FF3B30;
+    font-weight: 500; line-height: 1.4;
+  }
+
+  .ss-protect-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px;
+    background: var(--white);
+    border: 1px solid var(--input-border);
+    border-radius: 14px; margin-bottom: 6px;
+    opacity: 0; transform: translateX(20px);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ss-protect-item.reveal { opacity: 1; transform: translateX(0); }
+
+  .ss-protect-icon {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .ss-protect-icon svg {
+    width: 18px; height: 18px; fill: none;
+    stroke: var(--white); stroke-width: 2;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  .ss-protect-name {
+    font-size: 14px; font-weight: 600; color: var(--text-primary);
+  }
+
+  .ss-protect-desc {
+    font-size: 11px; color: var(--text-muted); margin-top: 1px;
+  }
+
+  .ss-protect-status {
+    margin-left: auto;
+    font-size: 11px; font-weight: 600;
+    padding: 4px 10px; border-radius: 100px;
+    background: rgba(52,199,89,0.12); color: #34C759;
+    flex-shrink: 0;
+  }
+
+  /* Replay overlay */
+  .replay-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100; opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .replay-overlay.show { opacity: 1; }
+
+  .replay-badge {
+    padding: 10px 24px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 100px;
+    font-size: 14px; font-weight: 600;
+    color: var(--dark);
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+
+  .replay-badge svg {
+    width: 16px; height: 16px;
+    fill: none; stroke: var(--dark);
+    stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== VOICE CALL FLOW ==================== -->
+<div class="flow-container" id="voiceFlow">
+
+  <!-- Voice Incoming -->
+  <div class="demo-screen active" id="vi1">
+    <div class="call-center">
+      <div class="call-avatar avatar-ring">
+        <div class="call-avatar-pulse"></div>
+        <div class="call-avatar-pulse"></div>
+        <div class="call-avatar-pulse"></div>
+        S
+      </div>
+      <div class="caller-name">Sarah M.</div>
+      <div class="call-status">Incoming Voice Call...</div>
+    </div>
+    <div style="position:absolute; bottom:60px; left:0; right:0; display:flex; justify-content:center;">
+      <div class="action-row">
+        <div class="action-item">
+          <div class="action-btn decline"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" transform="rotate(135 12 12)"/></svg></div>
+          <div class="action-label">Decline</div>
+        </div>
+        <div class="action-item">
+          <div class="action-btn accept"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div class="action-label">Accept</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Voice Active -->
+  <div class="demo-screen" id="vi2">
+    <div class="call-center">
+      <div class="call-avatar">S</div>
+      <div class="caller-name">Sarah M.</div>
+      <div class="call-status">Connected</div>
+      <div class="call-timer" id="voiceTimer">00:00</div>
+      <div class="ctrl-grid">
+        <div class="ctrl-item" id="muteBtn">
+          <div class="ctrl-circle"><svg viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2c0 .76-.13 1.49-.35 2.17"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
+          <div class="ctrl-text">Mute</div>
+        </div>
+        <div class="ctrl-item">
+          <div class="ctrl-circle"><svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></div>
+          <div class="ctrl-text">Speaker</div>
+        </div>
+        <div class="ctrl-item">
+          <div class="ctrl-circle"><svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg></div>
+          <div class="ctrl-text">Keypad</div>
+        </div>
+        <div class="ctrl-item">
+          <div class="ctrl-circle"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
+          <div class="ctrl-text">Video</div>
+        </div>
+        <div class="ctrl-item">
+          <div class="ctrl-circle"><svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
+          <div class="ctrl-text">Hold</div>
+        </div>
+        <div class="ctrl-item">
+          <div class="ctrl-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+          <div class="ctrl-text">Info</div>
+        </div>
+      </div>
+    </div>
+    <div style="position:absolute; bottom:60px; left:0; right:0; display:flex; justify-content:center;">
+      <div class="action-btn end"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" transform="rotate(135 12 12)"/></svg></div>
+    </div>
+  </div>
+
+  <!-- Voice Ended -->
+  <div class="demo-screen" id="vi3">
+    <div style="flex:1; display:flex; align-items:center; justify-content:center; padding-top:54px;">
+      <div class="ended-card" id="voiceEndedCard">
+        <div class="ended-icon" style="background: linear-gradient(135deg, #f472b6, #ec4899);">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div class="ended-title">Call Ended</div>
+        <div class="ended-duration" id="voiceEndedDuration">Sarah M. &bull; 0m 0s</div>
+        <div class="ended-actions">
+          <button class="ended-btn primary"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Call Back</button>
+          <button class="ended-btn secondary"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Message</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="replay-overlay" id="voiceReplay">
+    <div class="replay-badge">
+      <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+      Replaying...
+    </div>
+  </div>
+</div>
+
+<!-- ==================== VIDEO CALL FLOW ==================== -->
+<div class="flow-container" id="videoFlow">
+
+  <!-- Video Incoming -->
+  <div class="demo-screen video-screen active" id="vd1">
+    <div class="video-bg">
+      <div class="video-bg-blur"></div>
+      <div class="video-bg-grid"></div>
+      <div class="video-bg-overlay"></div>
+    </div>
+    <div class="video-pip">
+      <div class="pip-avatar">J</div>
+      <div class="pip-label">You</div>
+    </div>
+    <div class="video-encrypted">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span>End-to-end encrypted</span>
+    </div>
+    <div class="video-center">
+      <div class="call-avatar avatar-ring" style="width:112px; height:112px; font-size:42px;">
+        <div class="call-avatar-pulse"></div>
+        <div class="call-avatar-pulse"></div>
+        <div class="call-avatar-pulse"></div>
+        S
+      </div>
+      <div class="caller-name" style="color:#fff; text-shadow:0 2px 12px rgba(0,0,0,0.3);">Sarah M.</div>
+      <div class="call-status" style="color:rgba(255,255,255,0.55);">Incoming Video Call</div>
+    </div>
+    <div class="video-looping-badge">
+      <div class="green-dot"></div>
+      <span>Looping &bull; Video</span>
+    </div>
+    <div class="video-action-row">
+      <div class="action-item">
+        <div class="action-btn decline" style="width:68px; height:68px;"><svg viewBox="0 0 24 24" style="width:30px; height:30px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" transform="rotate(135 12 12)"/></svg></div>
+        <div class="action-label">Decline</div>
+      </div>
+      <div class="action-item">
+        <div class="action-btn accept" style="width:68px; height:68px;"><svg viewBox="0 0 24 24" style="width:30px; height:30px;"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
+        <div class="action-label">Accept</div>
+      </div>
+    </div>
+    <div class="video-hint">Tap to answer or decline</div>
+  </div>
+
+  <!-- Video Active -->
+  <div class="demo-screen video-screen" id="vd2">
+    <div class="video-bg">
+      <div class="video-bg-blur" style="opacity:0.5;"></div>
+      <div class="video-bg-grid"></div>
+      <div class="video-bg-overlay"></div>
+    </div>
+    <div class="video-pip">
+      <div class="pip-avatar">J</div>
+      <div class="pip-label">You</div>
+    </div>
+    <div class="video-header">
+      <div class="vname">Sarah M.</div>
+      <div class="vstatus" id="videoTimer">00:00</div>
+    </div>
+    <div class="video-bar">
+      <div class="video-ctrl"><svg viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+      <div class="video-ctrl"><svg viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2c0 .76-.13 1.49-.35 2.17"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
+      <div class="video-ctrl end-btn"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" transform="rotate(135 12 12)"/></svg></div>
+      <div class="video-ctrl"><svg viewBox="0 0 24 24"><path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34"/><line x1="1" y1="1" x2="23" y2="23"/><polygon points="23 7 16 12 23 17 23 7"/></svg></div>
+      <div class="video-ctrl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+    </div>
+  </div>
+
+  <!-- Video Ended -->
+  <div class="demo-screen" id="vd3">
+    <div style="flex:1; display:flex; align-items:center; justify-content:center; padding-top:54px;">
+      <div class="ended-card" id="videoEndedCard">
+        <div class="ended-icon" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+          <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        </div>
+        <div class="ended-title">Video Call Ended</div>
+        <div class="ended-duration" id="videoEndedDuration">Sarah M. &bull; 0m 0s</div>
+        <div class="ended-actions">
+          <button class="ended-btn primary"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>Call Back</button>
+          <button class="ended-btn secondary"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Message</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="replay-overlay" id="videoReplay">
+    <div class="replay-badge">
+      <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+      Replaying...
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SCREENSHOT GUARD FLOW ==================== -->
+<div class="flow-container" id="screenshotFlow">
+  <div class="demo-screen ss-screen active" id="ss1">
+    <div class="ss-header">
+      <div class="ss-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+      <div>
+        <div class="ss-title">Screenshot Guard</div>
+        <div class="ss-step">Privacy Settings</div>
+      </div>
+    </div>
+    <div class="ss-hero" id="ssHero">
+      <div class="ss-shield">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div class="check"><svg viewBox="0 0 24 24"><polyline points="4 12 9 17 20 6"/></svg></div>
+      </div>
+      <div class="ss-hero-title">Content Protection</div>
+      <div class="ss-hero-desc">Prevent screenshots and recordings to keep your conversations private</div>
+    </div>
+    <div class="ss-body">
+      <div class="ss-card">
+        <div class="ss-card-title">Protection Settings</div>
+        <div class="ss-toggle-row" id="ssToggle1">
+          <div>
+            <div class="ss-toggle-label">Block Screenshots</div>
+            <div class="ss-toggle-sub">Prevent screen captures</div>
+          </div>
+          <div class="ss-switch" id="ssSwitch1"></div>
+        </div>
+        <div class="ss-toggle-row" id="ssToggle2">
+          <div>
+            <div class="ss-toggle-label">Block Recording</div>
+            <div class="ss-toggle-sub">Prevent screen recording</div>
+          </div>
+          <div class="ss-switch" id="ssSwitch2"></div>
+        </div>
+        <div class="ss-toggle-row" id="ssToggle3">
+          <div>
+            <div class="ss-toggle-label">Notify on Attempt</div>
+            <div class="ss-toggle-sub">Alert when someone tries</div>
+          </div>
+          <div class="ss-switch" id="ssSwitch3"></div>
+        </div>
+      </div>
+
+      <div class="ss-badge" id="ssBadge">
+        <div class="ss-badge-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        </div>
+        <div class="ss-badge-text">All protection features are currently active and monitoring</div>
+      </div>
+
+      <div class="ss-card">
+        <div class="ss-card-title">What's Protected</div>
+        <div class="ss-protect-item" id="ssItem1">
+          <div class="ss-protect-icon" style="background: linear-gradient(135deg, #34C759, #30B350);">
+            <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div>
+            <div class="ss-protect-name">Chat Messages</div>
+            <div class="ss-protect-desc">All conversations protected</div>
+          </div>
+          <div class="ss-protect-status">Active</div>
+        </div>
+        <div class="ss-protect-item" id="ssItem2">
+          <div class="ss-protect-icon" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <div class="ss-protect-name">User Profiles</div>
+            <div class="ss-protect-desc">Profile data & photos</div>
+          </div>
+          <div class="ss-protect-status">Active</div>
+        </div>
+        <div class="ss-protect-item" id="ssItem3">
+          <div class="ss-protect-icon" style="background: linear-gradient(135deg, #f472b6, #ec4899);">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <div>
+            <div class="ss-protect-name">Shared Media</div>
+            <div class="ss-protect-desc">Images, videos & files</div>
+          </div>
+          <div class="ss-protect-status">Active</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="replay-overlay" id="ssReplay">
+    <div class="replay-badge">
+      <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+      Replaying...
+    </div>
+  </div>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const flow = params.get('flow') || 'voice';
+  const timers = [];
+
+  function wait(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function clearAll() { timers.forEach(clearTimeout); timers.length = 0; }
+
+  function showScreen(show, hide, exitCls) {
+    hide.forEach(s => { s.classList.remove('active'); s.classList.add('exit'); });
+    setTimeout(() => {
+      hide.forEach(s => s.classList.remove('exit'));
+      show.classList.add('active');
+    }, 100);
+  }
+
+  // ==================== VOICE CALL FLOW ====================
+  function runVoice() {
+    const s1 = document.getElementById('vi1');
+    const s2 = document.getElementById('vi2');
+    const s3 = document.getElementById('vi3');
+    const timerEl = document.getElementById('voiceTimer');
+    const muteBtn = document.getElementById('muteBtn');
+    const endedCard = document.getElementById('voiceEndedCard');
+    const durationEl = document.getElementById('voiceEndedDuration');
+    const replay = document.getElementById('voiceReplay');
+    let seconds = 0;
+    let timerInterval;
+
+    function resetVoice() {
+      clearAll();
+      if (timerInterval) clearInterval(timerInterval);
+      seconds = 0;
+      [s1, s2, s3].forEach(s => s.classList.remove('active', 'exit'));
+      muteBtn.classList.remove('active');
+      endedCard.classList.remove('reveal');
+      replay.classList.remove('show');
+      timerEl.textContent = '00:00';
+      s1.classList.add('active');
+    }
+
+    function startVoice() {
+      resetVoice();
+
+      // After 3s: accept the call -> switch to active
+      wait(() => {
+        showScreen(s2, [s1]);
+        seconds = 0;
+        timerInterval = setInterval(() => {
+          seconds++;
+          const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+          const sec = String(seconds % 60).padStart(2, '0');
+          timerEl.textContent = m + ':' + sec;
+        }, 1000);
+
+        // After 1.5s on active: activate mute
+        wait(() => muteBtn.classList.add('active'), 1500);
+
+        // After 6s on active: end call
+        wait(() => {
+          clearInterval(timerInterval);
+          const totalMin = Math.floor(seconds / 60);
+          const totalSec = seconds % 60;
+          durationEl.textContent = 'Sarah M. \u2022 ' + totalMin + 'm ' + totalSec + 's';
+          showScreen(s3, [s2]);
+
+          // Reveal ended card
+          wait(() => endedCard.classList.add('reveal'), 300);
+
+          // After 3s: show replay then restart
+          wait(() => {
+            replay.classList.add('show');
+            wait(() => startVoice(), 1500);
+          }, 3000);
+        }, 6000);
+      }, 3000);
+    }
+
+    startVoice();
+  }
+
+  // ==================== VIDEO CALL FLOW ====================
+  function runVideo() {
+    const s1 = document.getElementById('vd1');
+    const s2 = document.getElementById('vd2');
+    const s3 = document.getElementById('vd3');
+    const timerEl = document.getElementById('videoTimer');
+    const endedCard = document.getElementById('videoEndedCard');
+    const durationEl = document.getElementById('videoEndedDuration');
+    const replay = document.getElementById('videoReplay');
+    let seconds = 0;
+    let timerInterval;
+
+    function resetVideo() {
+      clearAll();
+      if (timerInterval) clearInterval(timerInterval);
+      seconds = 0;
+      [s1, s2, s3].forEach(s => s.classList.remove('active', 'exit'));
+      endedCard.classList.remove('reveal');
+      replay.classList.remove('show');
+      timerEl.textContent = '00:00';
+      s1.classList.add('active');
+    }
+
+    function startVideo() {
+      resetVideo();
+
+      // After 3s: accept -> active
+      wait(() => {
+        showScreen(s2, [s1]);
+        seconds = 0;
+        timerInterval = setInterval(() => {
+          seconds++;
+          const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+          const sec = String(seconds % 60).padStart(2, '0');
+          timerEl.textContent = m + ':' + sec;
+        }, 1000);
+
+        // After 6s on active: end
+        wait(() => {
+          clearInterval(timerInterval);
+          const totalMin = Math.floor(seconds / 60);
+          const totalSec = seconds % 60;
+          durationEl.textContent = 'Sarah M. \u2022 ' + totalMin + 'm ' + totalSec + 's';
+          showScreen(s3, [s2]);
+          s3.style.background = '#fff';
+          wait(() => endedCard.classList.add('reveal'), 300);
+
+          wait(() => {
+            replay.classList.add('show');
+            wait(() => startVideo(), 1500);
+          }, 3000);
+        }, 6000);
+      }, 3000);
+    }
+
+    startVideo();
+  }
+
+  // ==================== SCREENSHOT FLOW ====================
+  function runScreenshot() {
+    const hero = document.getElementById('ssHero');
+    const toggles = [
+      document.getElementById('ssToggle1'),
+      document.getElementById('ssToggle2'),
+      document.getElementById('ssToggle3')
+    ];
+    const switches = [
+      document.getElementById('ssSwitch1'),
+      document.getElementById('ssSwitch2'),
+      document.getElementById('ssSwitch3')
+    ];
+    const badge = document.getElementById('ssBadge');
+    const items = [
+      document.getElementById('ssItem1'),
+      document.getElementById('ssItem2'),
+      document.getElementById('ssItem3')
+    ];
+    const replay = document.getElementById('ssReplay');
+
+    function resetSS() {
+      clearAll();
+      hero.classList.remove('reveal');
+      toggles.forEach(t => t.classList.remove('reveal'));
+      switches.forEach(s => s.classList.remove('on'));
+      badge.classList.remove('reveal');
+      items.forEach(i => i.classList.remove('reveal'));
+      replay.classList.remove('show');
+    }
+
+    function startSS() {
+      resetSS();
+
+      // Staggered reveal
+      wait(() => hero.classList.add('reveal'), 500);
+
+      wait(() => { toggles[0].classList.add('reveal'); }, 1200);
+      wait(() => { switches[0].classList.add('on'); }, 1600);
+
+      wait(() => { toggles[1].classList.add('reveal'); }, 2000);
+      wait(() => { switches[1].classList.add('on'); }, 2400);
+
+      wait(() => { toggles[2].classList.add('reveal'); }, 2800);
+      wait(() => { switches[2].classList.add('on'); }, 3200);
+
+      wait(() => badge.classList.add('reveal'), 3800);
+
+      wait(() => items[0].classList.add('reveal'), 4500);
+      wait(() => items[1].classList.add('reveal'), 5000);
+      wait(() => items[2].classList.add('reveal'), 5500);
+
+      // Hold then replay
+      wait(() => {
+        replay.classList.add('show');
+        wait(() => startSS(), 1500);
+      }, 8500);
+    }
+
+    startSS();
+  }
+
+  // Activate the correct flow
+  const flowEl = document.getElementById(flow + 'Flow');
+  if (flowEl) {
+    flowEl.classList.add('active');
+    if (flow === 'voice') runVoice();
+    else if (flow === 'video') runVideo();
+    else if (flow === 'screenshot') runScreenshot();
+  }
+</script>
+
+</body>
+</html>
