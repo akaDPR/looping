@@ -11,19 +11,19 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --ink:     #0F0F0F;
-  --ink2:    #2A2A2A;
-  --muted:   #686868;
-  --light:   #ADADAD;
-  --rule:    #E2E2E2;
-  --off:     #F7F7F7;
+  --ink:     #2D1B69;
+  --ink2:    #3D2B7A;
+  --muted:   #7B6BA5;
+  --light:   #A99CC8;
+  --rule:    #E0D8F0;
+  --off:     #F5F2FA;
   --white:   #FFFFFF;
-  --dash:    #C4C4C4;
+  --dash:    #C4B8E0;
 }
 
 body {
   font-family: 'Inter', sans-serif;
-  background: #D5D5D5;
+  background: #D8D0E8;
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
 }
@@ -69,7 +69,7 @@ body {
 ══════════════════════════════ */
 
 .hero {
-  background: var(--ink);
+  background: linear-gradient(135deg, #1A0E3E 0%, #2D1B69 50%, #4A2D8A 100%);
   padding: 58px 56px 50px;
   flex-shrink: 0;
 }
@@ -117,7 +117,7 @@ body {
   display: flex; gap: 18px; align-items: flex-start;
 }
 .ps-card-problem {
-  background: var(--ink);
+  background: linear-gradient(135deg, #1A0E3E, #2D1B69);
   border-radius: 0;
 }
 .ps-card-solution {
@@ -163,7 +163,7 @@ body {
 .feat-list { flex: 1; padding: 0 56px; }
 .feat-row { display: flex; padding: 14px 0; border-bottom: 1px solid var(--rule); }
 .feat-row:last-child { border-bottom: none; }
-.feat-num { font-size: 10px; font-weight: 700; color: #D8D8D8; width: 28px; flex-shrink: 0; padding-top: 1px; letter-spacing: 0.04em; }
+.feat-num { font-size: 10px; font-weight: 700; color: #C4B8E0; width: 28px; flex-shrink: 0; padding-top: 1px; letter-spacing: 0.04em; }
 .feat-content { flex: 1; }
 .feat-title { font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: -0.1px; margin-bottom: 4px; }
 .feat-desc { font-size: 11.5px; color: var(--muted); line-height: 1.75; }
@@ -247,14 +247,14 @@ body {
   top: 18px; bottom: 18px;
   left: 50%;
   width: 0;
-  border-left: 1.5px dashed #E0E0E0;
+  border-left: 1.5px dashed #D0C4E8;
   z-index: 0;
 }
 
 /* ── TERMINAL (start / end) ── */
 .fl-terminal {
   position: relative; z-index: 1;
-  background: var(--ink); color: white;
+  background: linear-gradient(135deg, #2D1B69, #4A2D8A); color: white;
   border-radius: 100px; padding: 8px 30px;
   font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
   display: inline-flex; align-items: center; gap: 7px;
@@ -313,10 +313,10 @@ body {
 .fl-section-body { padding: 12px; background: white; }
 
 /* Section color themes */
-.fl-sec-auth .fl-section-head  { background: #1A1A2E; }
-.fl-sec-disc .fl-section-head  { background: var(--ink); }
-.fl-sec-out .fl-section-head   { background: #2A2A2A; }
-.fl-sec-comm .fl-section-head  { background: #0F0F0F; }
+.fl-sec-auth .fl-section-head  { background: #1A0E3E; }
+.fl-sec-disc .fl-section-head  { background: #2D1B69; }
+.fl-sec-out .fl-section-head   { background: #4A2D8A; }
+.fl-sec-comm .fl-section-head  { background: #371F7E; }
 
 /* ── BRANCH GRID ── */
 .fl-branches-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
@@ -410,7 +410,7 @@ body {
 .screen-row { display: flex; padding: 7px 0; border-bottom: 1px solid var(--rule); }
 .screen-row:nth-child(odd)  { border-right: 1px solid var(--rule); padding-right: 16px; }
 .screen-row:nth-child(even) { padding-left: 16px; }
-.screen-num { font-size: 9px; font-weight: 700; color: #D4D4D4; width: 28px; flex-shrink: 0; padding-top: 1px; }
+.screen-num { font-size: 9px; font-weight: 700; color: #C4B8E0; width: 28px; flex-shrink: 0; padding-top: 1px; }
 .screen-name { font-size: 11.5px; font-weight: 600; color: var(--ink); margin-bottom: 1px; }
 .screen-desc { font-size: 10.5px; color: var(--muted); line-height: 1.5; }
 
@@ -501,7 +501,7 @@ body {
 }
 
 .invest-hero {
-  background: var(--ink); border-radius: 10px;
+  background: linear-gradient(135deg, #1A0E3E 0%, #2D1B69 50%, #4A2D8A 100%); border-radius: 10px;
   padding: 32px 36px; display: flex; align-items: center;
   justify-content: space-between; gap: 30px;
 }
@@ -897,10 +897,10 @@ body {
         <div class="flow-header-sub">End-to-end journey from app launch through to communication.</div>
       </div>
       <div class="flow-legend">
-        <div class="flow-legend-item"><div class="flow-legend-swatch" style="background:#1A1A2E;"></div><span class="flow-legend-text">Auth</span></div>
+        <div class="flow-legend-item"><div class="flow-legend-swatch" style="background:#1A0E3E;"></div><span class="flow-legend-text">Auth</span></div>
         <div class="flow-legend-item"><div class="flow-legend-swatch" style="background:var(--ink);"></div><span class="flow-legend-text">Discovery</span></div>
-        <div class="flow-legend-item"><div class="flow-legend-swatch" style="background:#2A2A2A;"></div><span class="flow-legend-text">Outcome</span></div>
-        <div class="flow-legend-item"><div class="flow-legend-swatch" style="background:#0F0F0F;"></div><span class="flow-legend-text">Comms</span></div>
+        <div class="flow-legend-item"><div class="flow-legend-swatch" style="background:#4A2D8A;"></div><span class="flow-legend-text">Outcome</span></div>
+        <div class="flow-legend-item"><div class="flow-legend-swatch" style="background:#371F7E;"></div><span class="flow-legend-text">Comms</span></div>
       </div>
     </div>
 
