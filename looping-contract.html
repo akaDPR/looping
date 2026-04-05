@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Looping App - Development Contract</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            color: #000;
+            line-height: 1.8;
+            padding: 60px;
+            background: white;
+        }
+        
+        .contract {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 20px;
+            border-bottom: 3px double #000;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        
+        .header h2 {
+            font-size: 18px;
+            font-weight: normal;
+            margin-bottom: 20px;
+        }
+        
+        .header .meta {
+            font-size: 12px;
+            color: #333;
+        }
+        
+        h3 {
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 5px;
+        }
+        
+        h4 {
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            font-size: 11px;
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+        
+        .parties {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #000;
+        }
+        
+        .parties p {
+            margin: 8px 0;
+        }
+        
+        .parties strong {
+            display: inline-block;
+            width: 150px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 11px;
+        }
+        
+        table, th, td {
+            border: 1px solid #000;
+        }
+        
+        th {
+            background: #f0f0f0;
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        td {
+            padding: 8px;
+        }
+        
+        .amount {
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            font-size: 11px;
+            margin-bottom: 8px;
+        }
+        
+        .box {
+            border: 2px solid #000;
+            padding: 15px;
+            margin: 20px 0;
+            background: #f9f9f9;
+        }
+        
+        .box h4 {
+            margin-top: 0;
+        }
+        
+        .timeline-table {
+            font-size: 10px;
+        }
+        
+        .timeline-table td {
+            vertical-align: top;
+        }
+        
+        .signature-section {
+            margin-top: 60px;
+            page-break-inside: avoid;
+        }
+        
+        .signature-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+        
+        .signature-box {
+            width: 45%;
+        }
+        
+        .signature-box p {
+            margin: 5px 0;
+            font-size: 11px;
+        }
+        
+        .signature-line {
+            border-top: 1px solid #000;
+            margin-top: 40px;
+            padding-top: 5px;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        @media print {
+            body {
+                padding: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="contract">
+        <!-- Header -->
+        <div class="header">
+            <h1>SOFTWARE DEVELOPMENT CONTRACT</h1>
+            <h2>Looping Mobile Application</h2>
+            <p class="meta">Contract No: LOOP-2026-001 | Date: March 26, 2026</p>
+        </div>
+
+        <!-- Parties -->
+        <h3>Article 1: Parties</h3>
+        <div class="parties">
+            <p><strong>CLIENT:</strong></p>
+            <p>Name: _________________________________________</p>
+            <p>Company: _________________________________________</p>
+            <p>Address: _________________________________________</p>
+            <p>Email: _________________________________________</p>
+            <p>Phone: _________________________________________</p>
+            <br>
+            <p><strong>DEVELOPER:</strong></p>
+            <p>Name: _________________________________________</p>
+            <p>Company: _________________________________________</p>
+            <p>Address: _________________________________________</p>
+            <p>Email: _________________________________________</p>
+            <p>Phone: _________________________________________</p>
+        </div>
+
+        <!-- Project Description -->
+        <h3>Article 2: Project Description</h3>
+        <p><strong>Project Name:</strong> Looping</p>
+        <p><strong>Project Type:</strong> GPS-based proximity social networking mobile application</p>
+        <p><strong>Platform:</strong> Flutter (iOS + Android) with Node.js + Express backend and MongoDB database</p>
+        <p><strong>Scope:</strong> Development of 20 core features across 29 screens including user authentication, GPS-based nearby discovery, real-time chat via Socket.io, voice and video calling via Zegocloud/Agora SDK, screenshot protection, DigiLocker integration, and deployment to Apple App Store and Google Play Store.</p>
+
+        <!-- Contract Terms -->
+        <h3>Article 3: Contract Value and Payment Terms</h3>
+        <p><strong>Total Contract Value:</strong> INR 2,50,000 (Rupees Two Lakh Fifty Thousand Only)</p>
+        
+        <h4>3.1 Budget Breakdown</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th style="width: 150px;">Amount (INR)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Application Development (14 weeks)</td>
+                    <td class="amount">1,47,700</td>
+                </tr>
+                <tr>
+                    <td>Apple Developer Account (1 year)</td>
+                    <td class="amount">8,700</td>
+                </tr>
+                <tr>
+                    <td>Google Play Developer Account (one-time)</td>
+                    <td class="amount">2,100</td>
+                </tr>
+                <tr>
+                    <td>Voice & Video SDK (6 months)</td>
+                    <td class="amount">15,000</td>
+                </tr>
+                <tr>
+                    <td>Node.js Server Hosting (6 months)</td>
+                    <td class="amount">10,000</td>
+                </tr>
+                <tr>
+                    <td>Domain & Privacy Policy Hosting</td>
+                    <td class="amount">1,500</td>
+                </tr>
+                <tr>
+                    <td>Legal: Privacy Policy (India-compliant)</td>
+                    <td class="amount">25,000</td>
+                </tr>
+                <tr>
+                    <td>App Store Screenshots & Assets</td>
+                    <td class="amount">10,000</td>
+                </tr>
+                <tr>
+                    <td>Testing (Cross-device)</td>
+                    <td class="amount">5,000</td>
+                </tr>
+                <tr>
+                    <td>Miscellaneous</td>
+                    <td class="amount">5,000</td>
+                </tr>
+                <tr>
+                    <td>Contingency Buffer</td>
+                    <td class="amount">20,000</td>
+                </tr>
+                <tr style="background: #e0e0e0;">
+                    <td><strong>TOTAL</strong></td>
+                    <td class="amount"><strong>2,50,000</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4>3.2 Payment Schedule</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Milestone</th>
+                    <th style="width: 120px;">Amount (INR)</th>
+                    <th>Due Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Advance Payment (50%)</strong></td>
+                    <td class="amount">1,25,000</td>
+                    <td>Before project start (Week 0)</td>
+                </tr>
+                <tr>
+                    <td><strong>Mid-Project Payment (30%)</strong></td>
+                    <td class="amount">75,000</td>
+                    <td>After Milestone 2 Demo (Week 7) - Complete Discover → Connect → Chat flow</td>
+                </tr>
+                <tr>
+                    <td><strong>Final Payment (20%)</strong></td>
+                    <td class="amount">50,000</td>
+                    <td>Upon App Store & Play Store submission (Week 14)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Timeline -->
+        <h3>Article 4: Timeline and Deliverables</h3>
+        <p><strong>Project Duration:</strong> 14 Weeks</p>
+        <p><strong>Start Date:</strong> Week of April 1, 2026</p>
+        <p><strong>Expected Completion:</strong> July 3, 2026</p>
+
+        <h4>4.1 Development Phases</h4>
+        <table class="timeline-table">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Phase</th>
+                    <th style="width: 80px;">Weeks</th>
+                    <th>Deliverables</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Phase 1</strong></td>
+                    <td>1-3</td>
+                    <td>
+                        <strong>Foundation:</strong> Node.js/Express backend setup, MongoDB configuration, JWT authentication, Twilio SMS OTP, 5-step registration flow, social OAuth integration, profile management<br>
+                        <strong>Milestone 1:</strong> User can register, login, and view profile
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 2</strong></td>
+                    <td>4-7</td>
+                    <td>
+                        <strong>Discovery & Chat:</strong> Home dashboard, GPS location service, MongoDB geospatial nearby API, animated radar UI, connection request system, push notifications, real-time chat via Socket.io with typing indicator and image messages<br>
+                        <strong>Milestone 2:</strong> Complete Discover → Connect → Chat flow working
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 3</strong></td>
+                    <td>8-11</td>
+                    <td>
+                        <strong>Voice & Video Calls:</strong> Zegocloud/Agora SDK integration, voice call UI with controls, CallKit (iOS) & ConnectionService (Android), video call UI with PiP, call history, missed call notifications<br>
+                        <strong>Milestone 3:</strong> Full voice + video calling between users
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Phase 4</strong></td>
+                    <td>12-14</td>
+                    <td>
+                        <strong>Polish & Launch:</strong> DigiLocker integration, screenshot protection (FLAG_SECURE), block/report functionality, settings screens, UI polish, device testing (5+ Android, 2+ iOS), App Store & Play Store submissions<br>
+                        <strong>Milestone 4:</strong> App live on both stores
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Page Break -->
+        <div class="page-break"></div>
+
+        <!-- Scope of Work -->
+        <h3>Article 5: Scope of Work - Included Features</h3>
+        <p>The following 20 features are included in this contract:</p>
+        <ol>
+            <li>User Registration (5-step flow with profile, contact, identity, purpose, education, social accounts, privacy toggles)</li>
+            <li>Login (Email + Password, Phone + OTP, biometric authentication)</li>
+            <li>User Profile Management (view, edit, delete account)</li>
+            <li>GPS-Based Nearby Discovery (500m radius using MongoDB geospatial queries)</li>
+            <li>Radar/Scan UI with live user bubbles and distance calculation</li>
+            <li>Connection Request System (send, accept, reject, 48-hour expiry)</li>
+            <li>Real-time 1:1 Chat (text, images, message states, typing indicator via Socket.io)</li>
+            <li>Voice Calling (1:1 with mute, speaker, hold controls, CallKit/ConnectionService integration)</li>
+            <li>Video Calling (1:1 with PiP, camera flip, mute controls)</li>
+            <li>Push Notifications (FCM for all events: messages, calls, connection requests)</li>
+            <li>Screenshot & Screen Recording Protection (FLAG_SECURE on Android, detection on iOS)</li>
+            <li>Privacy Controls (field visibility toggles for profile information)</li>
+            <li>DigiLocker Integration (Aadhaar, PAN verification - client must obtain API access)</li>
+            <li>Social Account Linking (Google, Instagram, Facebook OAuth)</li>
+            <li>Connection/Contact List (with search, online indicators)</li>
+            <li>Call History Log (voice and video calls with timestamps)</li>
+            <li>Block / Report User (with reason selection and admin reporting)</li>
+            <li>App Settings (account, privacy, notifications configuration)</li>
+            <li>Delete Account (with data purging within 30 days per DPDPA 2023)</li>
+            <li>App Store & Play Store Deployment (with 5 screenshots per platform)</li>
+        </ol>
+
+        <h4>5.1 Screens Delivered</h4>
+        <p>Total screens: 29 (including splash, login, 5-step registration, home, radar, profiles, chat, voice/video call screens, settings, and all supporting screens)</p>
+
+        <!-- Exclusions -->
+        <h3>Article 6: Exclusions - Not Included in Scope</h3>
+        <p>The following features are explicitly excluded from this contract and may be quoted separately:</p>
+        <ol>
+            <li>Reels / Short Video Posting</li>
+            <li>Group Chat</li>
+            <li>Stories / Status Updates</li>
+            <li>Admin Web Dashboard</li>
+            <li>Payment / Subscription System</li>
+            <li>Multi-language / Localization</li>
+            <li>AI-based Matching / Recommendations</li>
+            <li>File/Document Sharing in Chat</li>
+            <li>Location Sharing in Chat</li>
+            <li>Web App Version</li>
+        </ol>
+
+        <!-- Client Obligations -->
+        <h3>Article 7: Client Obligations</h3>
+        <div class="box">
+            <h4>7.1 Required Before Week 1</h4>
+            <ul>
+                <li>Provide all branding assets (logo files, color palette, fonts)</li>
+                <li>Provide content for Terms & Conditions and Privacy Policy</li>
+                <li>Provision Node.js server environment (VPS/Railway/Render)</li>
+                <li>Setup MongoDB Atlas cluster or self-hosted MongoDB instance</li>
+            </ul>
+        </div>
+
+        <div class="box">
+            <h4>7.2 Client Must Purchase (Before Week 12)</h4>
+            <ul>
+                <li><strong>Apple Developer Account:</strong> INR 8,700/year - Required for iOS deployment (must be active before Week 12). Cost is included in contract budget above.</li>
+                <li><strong>Google Play Developer Account:</strong> INR 2,100 one-time - Required for Android deployment (must be active before Week 14). Cost is included in contract budget above.</li>
+            </ul>
+        </div>
+
+        <div class="box">
+            <h4>7.3 Client Must Apply For</h4>
+            <ul>
+                <li><strong>DigiLocker API Access:</strong> Client must apply for DigiLocker API partnership. Processing time: 4-6 weeks. Developer will handle technical integration once approved.</li>
+                <li><strong>OAuth Applications:</strong> Create developer accounts and OAuth apps for Instagram, Facebook, and Google. Developer will provide step-by-step instructions.</li>
+                <li><strong>Twilio Account:</strong> Create Twilio account for SMS OTP (free trial sufficient for development phase)</li>
+            </ul>
+        </div>
+
+        <!-- Technical Stack -->
+        <h3>Article 8: Technical Stack</h3>
+        <table>
+            <tr>
+                <td><strong>Mobile App:</strong></td>
+                <td>Flutter (Dart), Riverpod state management</td>
+            </tr>
+            <tr>
+                <td><strong>Backend:</strong></td>
+                <td>Node.js, Express.js, Socket.io (real-time)</td>
+            </tr>
+            <tr>
+                <td><strong>Database:</strong></td>
+                <td>MongoDB with 2dsphere geospatial indexes</td>
+            </tr>
+            <tr>
+                <td><strong>Authentication:</strong></td>
+                <td>JWT tokens, Twilio SMS OTP, Nodemailer</td>
+            </tr>
+            <tr>
+                <td><strong>File Storage:</strong></td>
+                <td>Cloudinary or AWS S3</td>
+            </tr>
+            <tr>
+                <td><strong>Push Notifications:</strong></td>
+                <td>Firebase Cloud Messaging (FCM)</td>
+            </tr>
+            <tr>
+                <td><strong>Voice/Video SDK:</strong></td>
+                <td>Zegocloud or Agora</td>
+            </tr>
+            <tr>
+                <td><strong>Hosting:</strong></td>
+                <td>VPS / Railway / Render</td>
+            </tr>
+        </table>
+
+        <!-- Page Break -->
+        <div class="page-break"></div>
+
+        <!-- Post-Launch Support -->
+        <h3>Article 9: Post-Launch Support</h3>
+        <h4>9.1 Included (First 30 Days After Launch)</h4>
+        <ul>
+            <li>Critical bug fixes affecting core functionality</li>
+            <li>App Store / Play Store rejection fixes and resubmissions</li>
+            <li>Performance issues on supported devices (Android 10+, iOS 15+)</li>
+        </ul>
+
+        <h4>9.2 Not Included (Quoted Separately)</h4>
+        <ul>
+            <li>New feature development</li>
+            <li>Server infrastructure maintenance beyond agreed hosting period (6 months)</li>
+            <li>Design changes or UI redesigns</li>
+            <li>Admin web dashboard</li>
+            <li>Analytics integration</li>
+            <li>Monthly maintenance retainer (estimated INR 15,000-25,000/month)</li>
+        </ul>
+
+        <!-- Legal Compliance -->
+        <h3>Article 10: Legal Compliance</h3>
+        <ol>
+            <li><strong>Aadhaar Act 2016:</strong> Application will NOT store raw Aadhaar numbers (Section 29 compliance)</li>
+            <li><strong>Data Encryption:</strong> All personal data encrypted at rest (MongoDB encrypted storage) and in transit (TLS 1.3)</li>
+            <li><strong>DPDPA 2023 Compliance:</strong> Consent collection, right to erasure, data minimization implemented</li>
+            <li><strong>Privacy Policy:</strong> Lawyer-drafted Privacy Policy and Terms of Service must be reviewed by client's legal counsel</li>
+            <li><strong>Grievance Officer:</strong> Client must designate Grievance Officer as required by DPDPA mandate</li>
+        </ol>
+
+        <!-- Intellectual Property -->
+        <h3>Article 11: Intellectual Property Rights</h3>
+        <p>Upon receipt of final payment (INR 50,000), all intellectual property rights, including source code, designs, and documentation, shall be transferred to the CLIENT. The DEVELOPER retains the right to use the project as a portfolio reference unless otherwise agreed in writing.</p>
+
+        <!-- Warranties -->
+        <h3>Article 12: Warranties and Limitations</h3>
+        <h4>12.1 Developer Warranties</h4>
+        <ul>
+            <li>Code will be developed according to industry best practices</li>
+            <li>Application will function as specified in Article 5 upon delivery</li>
+            <li>No third-party code used will violate any licenses or copyrights</li>
+        </ul>
+
+        <h4>12.2 Limitations</h4>
+        <ul>
+            <li>Developer is not responsible for App Store/Play Store review delays beyond 7 days</li>
+            <li>Developer is not responsible for third-party service outages (Zegocloud, Twilio, etc.)</li>
+            <li>Server infrastructure costs beyond the initial 6 months are client's responsibility</li>
+            <li>Voice/Video SDK costs beyond free tier (10,000 minutes/month) are client's responsibility</li>
+        </ul>
+
+        <!-- Termination -->
+        <h3>Article 13: Termination</h3>
+        <p><strong>13.1 By Client:</strong> Client may terminate this contract with 14 days written notice. Developer shall be compensated for all work completed up to termination date at the rate of INR 10,550 per week (total contract value ÷ 14 weeks).</p>
+        <p><strong>13.2 By Developer:</strong> Developer may terminate if payment is delayed by more than 15 days past due date, or if Client fails to provide required materials/access after two written requests.</p>
+
+        <!-- Change Requests -->
+        <h3>Article 14: Change Requests</h3>
+        <p>Any changes to features, timeline, or budget must be documented in a separate Change Request form and agreed upon by both parties in writing. Changes may result in additional costs and timeline extensions.</p>
+
+        <!-- Dispute Resolution -->
+        <h3>Article 15: Dispute Resolution</h3>
+        <p>Any disputes arising from this contract shall be resolved through mutual discussion. If unresolved after 30 days, disputes shall be subject to arbitration in [City], India under the Arbitration and Conciliation Act, 1996.</p>
+
+        <!-- Signatures -->
+        <div class="signature-section">
+            <h3>Article 16: Agreement</h3>
+            <p>By signing below, both parties agree to the terms and conditions outlined in this Software Development Contract.</p>
+
+            <div class="signature-row">
+                <div class="signature-box">
+                    <p><strong>CLIENT</strong></p>
+                    <div class="signature-line">
+                        <p>Signature: _______________________</p>
+                        <p>Name: _______________________</p>
+                        <p>Date: _______________________</p>
+                    </div>
+                </div>
+                <div class="signature-box">
+                    <p><strong>DEVELOPER</strong></p>
+                    <div class="signature-line">
+                        <p>Signature: _______________________</p>
+                        <p>Name: _______________________</p>
+                        <p>Date: _______________________</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <p style="text-align: center; margin-top: 40px; font-size: 10px; color: #666; border-top: 1px solid #000; padding-top: 20px;">
+            Contract No: LOOP-2026-001 | Looping Mobile Application Development | Page 1 of 1
+        </p>
+    </div>
+</body>
+</html>

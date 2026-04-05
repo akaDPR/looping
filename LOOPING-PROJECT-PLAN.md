@@ -1,7 +1,7 @@
 # LOOPING — Project Scope & Development Plan
 
-**Version:** 1.0
-**Date:** 15 March 2026
+**Version:** 1.1
+**Date:** 26 March 2026
 **Platform:** Flutter (iOS + Android)
 **Budget:** INR 2,50,000 (Two Lakh Fifty Thousand)
 **Timeline:** 14 Weeks
@@ -25,7 +25,7 @@
 
 ## 1. PROJECT OVERVIEW
 
-**Looping** is a proximity-based social networking app that allows users to discover, connect, and communicate with people nearby using Bluetooth Low Energy (BLE) and location services.
+**Looping** is a proximity-based social networking app that allows users to discover, connect, and communicate with people nearby using GPS-based location services.
 
 **Core Value Proposition:** Find and connect with verified, real people in your physical vicinity — at events, campuses, co-working spaces, and public places.
 
@@ -40,7 +40,7 @@
 | F01 | User Registration (5-step flow) | Must Have |
 | F02 | Login (Phone OTP + Email) | Must Have |
 | F03 | User Profile Management | Must Have |
-| F04 | Nearby Discovery (BLE + Location) | Must Have |
+| F04 | Nearby Discovery (GPS Location-based) | Must Have |
 | F05 | Radar/Scan UI with live user bubbles | Must Have |
 | F06 | Connection Request (Send / Accept / Reject) | Must Have |
 | F07 | Real-time 1:1 Chat | Must Have |
@@ -89,7 +89,7 @@
 - Avatar with initials as fallback
 
 **Step 2: Contact & Identity**
-- Mobile number with OTP verification (Firebase Auth)
+- Mobile number with OTP verification (Twilio SMS OTP via Node.js backend)
 - Email address with verification link
 - Identity document type selector (Aadhaar / National ID / Passport)
 - Masked display of ID number (only last 4 digits visible)
@@ -133,7 +133,7 @@
 - Phone number + OTP login
 - "Forgot Password" flow (email reset link)
 - "Create Account" link → Registration
-- Auto-login if session exists (Firebase token refresh)
+- Auto-login if session exists (JWT token refresh via Node.js API)
 - Biometric login (fingerprint/Face ID) — device-native
 
 ---
@@ -149,20 +149,20 @@
 
 ---
 
-### F04 — Nearby Discovery (BLE + Location)
+### F04 — Nearby Discovery (GPS Location-based)
 
 **How it works:**
-1. App broadcasts a BLE advertisement containing a unique user token
-2. App simultaneously scans for other Looping users' BLE signals
-3. RSSI (signal strength) is used to estimate approximate distance
-4. Firestore geo-queries provide fallback when BLE is unavailable
+1. App captures the user's current GPS coordinates (lat/lng)
+2. Coordinates are sent to the Node.js backend API
+3. Backend performs a geospatial radius query (MongoDB `$nearSphere` or PostGIS `ST_DWithin`) to find other active users within the configured radius
+4. Only users who have discovery enabled and are within radius are returned
 
 **Technical Details:**
-- BLE scanning range: ~10-30 meters (varies by device)
-- Scan interval: Every 3 seconds while discovery is active
-- Battery optimization: Scan stops when app is backgrounded
-- Location permission: Required for BLE on Android 12+
-- Fallback: If BLE unavailable, use GPS-based proximity (50m radius)
+- Discovery radius: 500 meters (configurable per user/admin)
+- Location update interval: Every 5 seconds while discovery is active
+- Battery optimization: Location updates pause when app is backgrounded
+- Permissions: `ACCESS_FINE_LOCATION` (Android), `NSLocationWhenInUseUsageDescription` (iOS)
+- Accuracy: GPS fine location for best results; degrades gracefully to network/cell location
 
 **User Experience:**
 - User taps "Find Nearby" on home screen
@@ -174,9 +174,9 @@
 
 **Privacy:**
 - User can turn discovery ON/OFF
-- When OFF, user is invisible to nearby scans
-- No location history is stored
-- BLE tokens rotate every 24 hours
+- When OFF, location is not sent to the server; user is invisible in all nearby queries
+- Precise coordinates are never exposed to other users — only approximate distance is shared
+- No location history is stored; the server only holds the last known active location
 
 ---
 
@@ -232,7 +232,7 @@
 - Timestamp on each message
 
 **Chat Features:**
-- Real-time delivery (Firestore real-time listeners)
+- Real-time delivery (Socket.io on Node.js backend)
 - Message states: Sent (single tick) → Delivered (double tick) → Read (blue ticks)
 - "Typing..." indicator
 - Chat date dividers ("Today", "Yesterday", date)
@@ -254,7 +254,7 @@
 - Attachment button (image picker)
 
 **Data:**
-- Messages stored in Firestore subcollection per chat
+- Messages stored in MongoDB `messages` collection (indexed by chatId + timestamp)
 - Chat list ordered by last message timestamp
 - Unread count badge on chat tab
 
@@ -372,10 +372,10 @@
 | Screenshot attempt (if enabled) | "[Name] tried to screenshot" | Open chat |
 
 **Technical:**
-- Firebase Cloud Messaging (FCM)
+- Firebase Cloud Messaging (FCM) triggered from Node.js backend via `firebase-admin` SDK
 - Data messages for calls (high priority, wakes app)
 - Notification messages for chat/connection
-- Token refresh handling
+- FCM device token stored and managed by Node.js API
 - Topic-based for future broadcast notifications
 
 ---
@@ -414,7 +414,7 @@
   - Occupation → Shown in discovery (ON/OFF)
   - Education → College & school info (ON/OFF)
   - Social Accounts → Instagram, Facebook (ON/OFF)
-- Settings persist in Firestore user document
+- Settings persist via Node.js REST API (stored in MongoDB user document)
 - Affects what nearby users see in radar bubbles and mini-profiles
 
 ---
@@ -437,7 +437,7 @@
 
 | Platform | Method | What We Get |
 |----------|--------|-------------|
-| Google | Firebase Google Sign-In | Email, name, avatar |
+| Google | Google OAuth 2.0 (via Node.js backend) | Email, name, avatar |
 | Instagram | Instagram Basic Display API | Username, profile pic |
 | Facebook | Facebook Login SDK | Name, profile pic, email |
 | LinkedIn | LinkedIn OAuth 2.0 | Name, headline (optional, future) |
@@ -481,7 +481,7 @@
 **Report:**
 - Report reasons: Harassment, Fake profile, Spam, Inappropriate content, Other
 - Optional text description
-- Report stored in Firestore `reports` collection
+- Report stored in MongoDB `reports` collection via Node.js API
 - Reported user flagged for manual review (future admin dashboard)
 
 ---
@@ -504,11 +504,11 @@
 - Confirmation: "Are you sure? This action cannot be undone."
 - Second confirmation: Type "DELETE" to confirm
 - On delete:
-  - Firebase Auth account deleted
-  - Firestore user document marked as deleted
+  - JWT tokens invalidated (token blacklist or short expiry)
+  - MongoDB user document marked as `deleted: true`
   - Profile removed from all connections' lists
   - Chat history retained for other user but shows "[Deleted User]"
-  - All personal data purged within 30 days (DPDPA compliance)
+  - All personal data purged within 30 days via scheduled Node.js job (DPDPA compliance)
 
 ---
 
@@ -536,7 +536,7 @@
 | S06 | Registration Step 4 — Social & Documents | Form + OAuth |
 | S07 | Registration Step 5 — Privacy & Terms | Form |
 | S08 | Home (Dashboard) | Interactive |
-| S09 | Nearby Scan / Radar | Animated + BLE |
+| S09 | Nearby Scan / Radar | Animated + GPS |
 | S10 | User Mini-Profile (Bottom Sheet) | Modal |
 | S11 | Connection Request Sent (Overlay) | Modal |
 | S12 | Connection Accepted | Static |
@@ -569,7 +569,7 @@
 │                 FLUTTER APP                  │
 │  ┌─────────┐ ┌──────────┐ ┌──────────────┐  │
 │  │  UI      │ │  State   │ │  Services    │  │
-│  │  Screens │ │  Riverpod│ │  BLE/Calls   │  │
+│  │  Screens │ │  Riverpod│ │  GPS/Calls   │  │
 │  └────┬─────┘ └────┬─────┘ └──────┬───────┘  │
 │       └─────────────┼──────────────┘          │
 │                     │                         │
@@ -578,65 +578,83 @@
 │              │    Layer     │                 │
 │              └──────┬───────┘                 │
 └─────────────────────┼─────────────────────────┘
-                      │
+                      │ REST API + Socket.io
         ┌─────────────┼─────────────┐
         │             │             │
-  ┌─────┴─────┐ ┌─────┴─────┐ ┌────┴──────┐
-  │ Firebase   │ │ Zegocloud │ │ DigiLocker│
-  │ Auth       │ │ Voice SDK │ │ API       │
-  │ Firestore  │ │ Video SDK │ │           │
-  │ Storage    │ │           │ │           │
-  │ FCM        │ │           │ │           │
-  └────────────┘ └───────────┘ └───────────┘
+  ┌─────┴──────┐ ┌────┴──────┐ ┌───┴───────┐
+  │ Node.js    │ │ Zegocloud │ │ DigiLocker│
+  │ Express    │ │ Voice SDK │ │ API       │
+  │ REST API   │ │ Video SDK │ │           │
+  │ Socket.io  │ └───────────┘ └───────────┘
+  │ (chat/     │
+  │  presence) │
+  └─────┬──────┘
+        │
+  ┌─────┴──────────────────────┐
+  │         MongoDB             │
+  │  (geospatial indexes for    │
+  │   $nearSphere queries)      │
+  │                             │
+  │  + Cloudinary / AWS S3      │
+  │    (media/profile photos)   │
+  │                             │
+  │  + FCM (firebase-admin)     │
+  │    (push notifications)     │
+  └────────────────────────────┘
 ```
 
-**Firestore Collections:**
+**Backend Stack:**
+- **Runtime:** Node.js (LTS)
+- **Framework:** Express.js
+- **Database:** MongoDB with geospatial indexes (`2dsphere`)
+- **Real-time:** Socket.io (chat messages, typing indicator, online presence)
+- **Authentication:** JWT (access + refresh tokens), Twilio for SMS OTP, Nodemailer for email OTP
+- **File Storage:** Cloudinary or AWS S3 (profile photos, chat images)
+- **Push Notifications:** FCM via `firebase-admin` Node.js SDK
+- **Voice/Video Signaling:** Zegocloud / Agora SDK (token generation on Node.js backend)
+- **Hosting:** VPS / Railway / Render (Node.js server)
+
+**MongoDB Collections:**
 
 ```
-users/
-  {userId}/
-    profile: { name, dob, occupation, ... }
-    privacy: { nameVisible, phoneVisible, ... }
-    verification: { isAadhaarVerified, isPanVerified, ... }
-    socialLinks: { instagram, facebook, google, ... }
-    settings: { notificationsEnabled, discoveryEnabled, ... }
+users
+  _id, name, dob, occupation, address
+  phone, email, passwordHash
+  location: { type: "Point", coordinates: [lng, lat] }  // 2dsphere index
+  privacy: { nameVisible, phoneVisible, ... }
+  verification: { isAadhaarVerified, isPanVerified, maskedId }
+  socialLinks: { instagram, facebook, google }
+  settings: { notificationsEnabled, discoveryEnabled, fcmToken }
+  isDeleted: boolean, createdAt, updatedAt
 
-connections/
-  {connectionId}/
-    users: [userId1, userId2]
-    status: "pending" | "accepted" | "rejected"
-    requestedBy: userId
-    createdAt: timestamp
+connections
+  _id, users: [userId1, userId2]
+  status: "pending" | "accepted" | "rejected"
+  requestedBy: userId
+  createdAt, expiresAt (48h for pending)
 
-chats/
-  {chatId}/
-    participants: [userId1, userId2]
-    lastMessage: { text, timestamp, senderId }
-    messages/ (subcollection)
-      {messageId}/
-        text: string
-        senderId: userId
-        timestamp: timestamp
-        status: "sent" | "delivered" | "read"
-        type: "text" | "image"
+chats
+  _id, participants: [userId1, userId2]
+  lastMessage: { text, timestamp, senderId }
+  createdAt, updatedAt
 
-calls/
-  {callId}/
-    caller: userId
-    callee: userId
-    type: "voice" | "video"
-    status: "ringing" | "connected" | "ended" | "missed"
-    startTime: timestamp
-    endTime: timestamp
-    duration: number (seconds)
+messages
+  _id, chatId, senderId
+  text: string
+  imageUrl: string (optional)
+  status: "sent" | "delivered" | "read"
+  type: "text" | "image"
+  timestamp
 
-reports/
-  {reportId}/
-    reportedUser: userId
-    reportedBy: userId
-    reason: string
-    description: string
-    timestamp: timestamp
+calls
+  _id, caller, callee
+  type: "voice" | "video"
+  status: "ringing" | "connected" | "ended" | "missed"
+  startTime, endTime, duration (seconds)
+
+reports
+  _id, reportedUser, reportedBy
+  reason, description, timestamp
 ```
 
 ---
@@ -646,7 +664,7 @@ reports/
 ### PHASE 1: Foundation (Week 1–3)
 | Week | Tasks | Deliverable |
 |------|-------|-------------|
-| 1 | Project setup, architecture, Firebase config, Auth (OTP + Email) | Login working |
+|| 1 | Project setup, Node.js/Express scaffold, MongoDB config, JWT Auth + Twilio OTP | Login working |
 | 2 | Registration Steps 1-3, Profile photo upload | 3-step registration |
 | 3 | Registration Steps 4-5, Social OAuth, Privacy toggles | Full registration flow |
 
@@ -657,8 +675,8 @@ reports/
 ### PHASE 2: Discovery & Chat (Week 4–7)
 | Week | Tasks | Deliverable |
 |------|-------|-------------|
-| 4 | Home screen, Bottom navigation, BLE setup | Home + nav shell |
-| 5 | BLE scanning, Radar UI, Nearby user bubbles | Radar discovers users |
+|| 4 | Home screen, Bottom navigation, GPS location service setup | Home + nav shell |
+|| 5 | GPS-based nearby API, MongoDB geospatial query, Radar UI + user bubbles | Radar discovers users |
 | 6 | Connection requests (send/accept/reject), Push notifications | Users can connect |
 | 7 | Real-time chat, Message states, Typing indicator, Image messages | Full chat working |
 
@@ -698,7 +716,7 @@ reports/
 | Apple Developer Account (1 year) | 8,700 |
 | Google Play Developer Account (one-time) | 2,100 |
 | Zegocloud / Agora (voice+video SDK, 6 months) | 15,000 |
-| Firebase Blaze Plan (6 months buffer) | 10,000 |
+|| Node.js Server Hosting (VPS/Railway/Render, 6 months) | 10,000 |
 | Domain for deep links + privacy policy hosting | 1,500 |
 | Privacy Policy (lawyer-drafted, India-compliant) | 25,000 |
 | App Store screenshots & assets design | 10,000 |
@@ -741,15 +759,17 @@ reports/
 7. Voice/Video SDK free tier is sufficient for initial launch (<10,000 minutes/month)
 
 ### Dependencies
-1. Firebase project created and billing enabled (Blaze plan)
-2. Apple Developer Account active before Week 12
-3. Google Play Developer Account active before Week 14
-4. DigiLocker API access approved (apply 4-6 weeks before needed)
-5. Social OAuth apps created (Instagram, Facebook, Google developer consoles)
+1. Node.js server environment provisioned (VPS / Railway / Render) before Week 1
+2. MongoDB Atlas cluster or self-hosted MongoDB instance ready before Week 1
+3. Apple Developer Account active before Week 12
+4. Google Play Developer Account active before Week 14
+5. DigiLocker API access approved (apply 4-6 weeks before needed)
+6. Social OAuth apps created (Instagram, Facebook, Google developer consoles)
+7. Twilio account active for SMS OTP (free trial sufficient for development)
 
 ### Legal Compliance
 1. App will NOT store raw Aadhaar numbers (Aadhaar Act 2016 Section 29)
-2. All personal data encrypted at rest (Firestore) and in transit (TLS 1.3)
+2. All personal data encrypted at rest (MongoDB encrypted storage) and in transit (TLS 1.3)
 3. DPDPA 2023 compliant: Consent collection, right to erasure, data minimization
 4. Privacy Policy and Terms of Service must be reviewed by legal counsel
 5. Grievance Officer details required in app (DPDPA mandate)
@@ -779,7 +799,7 @@ reports/
 - 20 features as listed in Section 2 (F01–F20)
 - 29 screens as listed in Section 4 (S01–S29)
 - Flutter app for iOS and Android
-- Firebase backend
+- Node.js + Express backend with MongoDB
 - Voice and Video calling via Zegocloud/Agora
 - 14-week delivery timeline
 - ₹2,50,000 total budget
@@ -788,7 +808,7 @@ reports/
 - 10 features as listed in Section 2 (X01–X10)
 - Any feature not explicitly listed above
 - Post-30-day support and maintenance
-- Server costs beyond free tier limits
+- Server infrastructure costs beyond agreed hosting budget
 
 ---
 

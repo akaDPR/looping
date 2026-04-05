@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice - Looping App Development</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            padding: 40px;
+            background: #f9f9f9;
+        }
+        
+        .invoice-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 60px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 50px;
+            border-bottom: 3px solid #2563eb;
+            padding-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2563eb;
+            letter-spacing: 2px;
+        }
+        
+        .invoice-info {
+            text-align: right;
+        }
+        
+        .invoice-info h1 {
+            font-size: 36px;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+        
+        .invoice-info p {
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .parties {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 50px;
+        }
+        
+        .party {
+            flex: 1;
+        }
+        
+        .party h3 {
+            color: #2563eb;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+        
+        .party p {
+            color: #475569;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .party strong {
+            color: #1e293b;
+            font-size: 16px;
+        }
+        
+        .project-details {
+            background: #f1f5f9;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+        }
+        
+        .project-details h2 {
+            color: #1e293b;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .project-details p {
+            color: #475569;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 40px;
+        }
+        
+        thead {
+            background: #2563eb;
+            color: white;
+        }
+        
+        thead th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        tbody td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+            font-size: 14px;
+        }
+        
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+        
+        .amount {
+            text-align: right;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .summary {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 40px;
+        }
+        
+        .summary-table {
+            width: 350px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .summary-row.total {
+            border-top: 3px solid #2563eb;
+            border-bottom: 3px solid #2563eb;
+            padding: 20px 0;
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        
+        .summary-label {
+            color: #64748b;
+            font-size: 14px;
+        }
+        
+        .summary-value {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .payment-terms {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 4px;
+        }
+        
+        .payment-terms h3 {
+            color: #92400e;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .payment-terms p {
+            color: #78350f;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        
+        .requirements {
+            background: #dbeafe;
+            border-left: 4px solid #2563eb;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 4px;
+        }
+        
+        .requirements h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .requirements ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .requirements li {
+            color: #1e40af;
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            font-size: 14px;
+        }
+        
+        .requirements li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #2563eb;
+        }
+        
+        .footer {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 2px solid #e2e8f0;
+            color: #64748b;
+            font-size: 13px;
+        }
+        
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
+            margin-bottom: 30px;
+        }
+        
+        .signature-box {
+            width: 45%;
+            border-top: 2px solid #94a3b8;
+            padding-top: 10px;
+        }
+        
+        .signature-box p {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .invoice-container {
+                box-shadow: none;
+                padding: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">LOOPING</div>
+            <div class="invoice-info">
+                <h1>INVOICE</h1>
+                <p>Invoice #: LOOP-2026-001</p>
+                <p>Date: March 26, 2026</p>
+                <p>Due Date: Upon Receipt</p>
+            </div>
+        </div>
+
+        <!-- Parties -->
+        <div class="parties">
+            <div class="party">
+                <h3>Billed To</h3>
+                <p><strong>[Client Company Name]</strong></p>
+                <p>[Client Address Line 1]</p>
+                <p>[Client Address Line 2]</p>
+                <p>[City, State, PIN]</p>
+                <p>Email: [client@email.com]</p>
+                <p>Phone: [+91-XXXXXXXXXX]</p>
+            </div>
+            <div class="party">
+                <h3>From</h3>
+                <p><strong>[Your Company/Name]</strong></p>
+                <p>[Your Address Line 1]</p>
+                <p>[Your Address Line 2]</p>
+                <p>[City, State, PIN]</p>
+                <p>Email: [your@email.com]</p>
+                <p>Phone: [+91-XXXXXXXXXX]</p>
+                <p>GSTIN: [Your GST Number]</p>
+            </div>
+        </div>
+
+        <!-- Project Details -->
+        <div class="project-details">
+            <h2>Project: Looping Mobile Application Development</h2>
+            <p><strong>Platform:</strong> Flutter (iOS + Android)</p>
+            <p><strong>Timeline:</strong> 14 Weeks (Starting from Week of April 1, 2026)</p>
+            <p><strong>Expected Launch:</strong> July 3, 2026</p>
+            <p><strong>Deliverables:</strong> 20 Features, 29 Screens, Node.js Backend, App Store & Play Store Deployment</p>
+        </div>
+
+        <!-- Line Items -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th style="text-align: right;">Amount (INR)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <strong>Application Development (14 Weeks)</strong><br>
+                        <small>Flutter mobile app development for iOS + Android<br>
+                        Node.js + Express backend with MongoDB<br>
+                        20 features, 29 screens, real-time chat, voice/video calling<br>
+                        Includes: Code review, architecture, bug fixes during development</small>
+                    </td>
+                    <td class="amount">₹1,47,700</td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Apple Developer Account (1 Year)</strong><br>
+                        <small>Required for iOS app deployment to App Store</small>
+                    </td>
+                    <td class="amount">₹8,700</td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Google Play Developer Account (One-time)</strong><br>
+                        <small>Required for Android app deployment to Play Store</small>
+                    </td>
+                    <td class="amount">₹2,100</td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Voice & Video SDK (Zegocloud/Agora - 6 Months)</strong><br>
+                        <small>Real-time voice and video calling infrastructure</small>
+                    </td>
+                    <td class="amount">₹15,000</td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Node.js Server Hosting (6 Months)</strong><br>
+                        <small>VPS/Railway/Render hosting for backend API and database</small>
+                    </td>
+                    <td class="amount">₹10,000</td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Domain & Privacy Policy Hosting</strong><br>
+                        <small>Domain registration and hosting for terms, privacy policy</small>
+                    </td>
+                    <td class="amount">₹1,500</td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Legal: Privacy Policy (India-Compliant)</strong><br>
+                        <small>Lawyer-drafted Privacy Policy and Terms of Service (DPDPA 2023)</small>
+                    </td>
+                    <td class="amount">₹25,000</td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>App Store Assets & Screenshots</strong><br>
+                        <small>Professional design of 5 screenshots per platform, app descriptions</small>
+                    </td>
+                    <td class="amount">₹10,000</td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Testing (Cross-Device)</strong><br>
+                        <small>Testing on 5+ Android devices, 2+ iOS devices (BrowserStack)</small>
+                    </td>
+                    <td class="amount">₹5,000</td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Miscellaneous</strong><br>
+                        <small>Icons, fonts, SSL certificates, API keys, etc.</small>
+                    </td>
+                    <td class="amount">₹5,000</td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Contingency Buffer</strong><br>
+                        <small>Scope adjustments, unforeseen issues, extra iterations</small>
+                    </td>
+                    <td class="amount">₹20,000</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Summary -->
+        <div class="summary">
+            <div class="summary-table">
+                <div class="summary-row">
+                    <span class="summary-label">Subtotal:</span>
+                    <span class="summary-value">₹2,50,000</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Tax (if applicable):</span>
+                    <span class="summary-value">₹0</span>
+                </div>
+                <div class="summary-row total">
+                    <span>TOTAL DUE:</span>
+                    <span>₹2,50,000</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Terms -->
+        <div class="payment-terms">
+            <h3>⚠️ Payment Terms</h3>
+            <p><strong>Payment Schedule:</strong></p>
+            <p>• 50% Advance (₹1,25,000) — Due before project start (Week 0)</p>
+            <p>• 30% Mid-Project (₹75,000) — After Milestone 2 Demo (Week 7)</p>
+            <p>• 20% Final Payment (₹50,000) — Upon App Store/Play Store submission (Week 14)</p>
+        </div>
+
+        <!-- Client Requirements -->
+        <div class="requirements">
+            <h3>📋 Client Action Items (Required Before Week 1)</h3>
+            <ul>
+                <li><strong>Apple Developer Account:</strong> Client must purchase and activate before Week 12</li>
+                <li><strong>Google Play Developer Account:</strong> Client must purchase and activate before Week 14</li>
+                <li>Provide branding assets (logo, colors, fonts)</li>
+                <li>Provide content for Terms & Conditions and Privacy Policy</li>
+                <li>Apply for DigiLocker API access (4-6 weeks processing time)</li>
+                <li>Create OAuth apps for Instagram, Facebook, Google</li>
+            </ul>
+        </div>
+
+        <!-- Signature Section -->
+        <div class="signature-section">
+            <div class="signature-box">
+                <p><strong>Client Signature</strong></p>
+                <p>Name: _______________________</p>
+                <p>Date: _______________________</p>
+            </div>
+            <div class="signature-box">
+                <p><strong>Developer Signature</strong></p>
+                <p>Name: _______________________</p>
+                <p>Date: _______________________</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>This invoice is valid for 30 days from the date of issue.</p>
+            <p>For questions regarding this invoice, please contact [your@email.com]</p>
+            <p style="margin-top: 20px; color: #94a3b8; font-size: 11px;">
+                LOOPING App Development Project | Invoice #LOOP-2026-001 | March 26, 2026
+            </p>
+        </div>
+    </div>
+</body>
+</html>

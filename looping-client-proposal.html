@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Looping — Project Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ink:     #0F0F0F;
+  --ink2:    #2A2A2A;
+  --muted:   #686868;
+  --light:   #ADADAD;
+  --rule:    #E2E2E2;
+  --off:     #F7F7F7;
+  --white:   #FFFFFF;
+  --dash:    #C4C4C4;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #D5D5D5;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 4px;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  page-break-after: always;
+  overflow: hidden;
+}
+
+/* ── SHARED ── */
+.top-bar {
+  padding: 20px 56px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.bar-brand { font-size: 13px; font-weight: 700; color: var(--ink); }
+.bar-label  { font-size: 10px; color: var(--light); }
+
+.page-footer {
+  margin-top: auto;
+  padding: 14px 56px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.footer-left  { font-size: 10px; color: var(--light); }
+.footer-right { font-size: 10px; font-weight: 600; color: var(--light); }
+
+
+/* ══════════════════════════════
+   PAGE 1 — COVER
+══════════════════════════════ */
+
+.hero {
+  background: var(--ink);
+  padding: 58px 56px 50px;
+  flex-shrink: 0;
+}
+.hero-eyebrow {
+  font-size: 9.5px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.28); margin-bottom: 30px;
+}
+.hero-name {
+  font-size: 80px; font-weight: 800; color: #FFF;
+  letter-spacing: -5px; line-height: 0.88; margin-bottom: 20px;
+}
+.hero-tagline {
+  font-size: 14px; font-weight: 300;
+  color: rgba(255,255,255,0.44); line-height: 1.7;
+  max-width: 440px; margin-bottom: 48px;
+}
+.hero-stats {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  border-top: 1px solid rgba(255,255,255,0.08); padding-top: 26px;
+}
+.stat { padding-right: 32px; }
+.stat:last-child { padding-right: 0; }
+.stat-label {
+  font-size: 9px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(255,255,255,0.28); margin-bottom: 5px;
+}
+.stat-value { font-size: 15px; font-weight: 600; color: #FFF; letter-spacing: -0.2px; }
+
+.desc-section {
+  padding: 36px 56px; flex: 1;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.sec-label {
+  font-size: 9.5px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--light);
+  padding-bottom: 11px; border-bottom: 1px solid var(--rule);
+}
+.desc-heading { font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -0.4px; }
+.desc-body { font-size: 13px; color: var(--ink2); line-height: 1.9; display: flex; flex-direction: column; gap: 12px; }
+.desc-body strong { font-weight: 600; color: var(--ink); }
+.ps-stack { display: flex; flex-direction: column; margin-top: 4px; }
+.ps-card {
+  padding: 18px 22px;
+  display: flex; gap: 18px; align-items: flex-start;
+}
+.ps-card-problem {
+  background: var(--ink);
+  border-radius: 0;
+}
+.ps-card-solution {
+  background: var(--off);
+  border: 1px solid var(--rule);
+  border-top: none;
+}
+.ps-icon {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.ps-card-problem .ps-icon { background: rgba(255,255,255,0.1); }
+.ps-card-solution .ps-icon { background: var(--ink); }
+.ps-icon svg { width: 16px; height: 16px; }
+.ps-body { flex: 1; }
+.ps-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.ps-card-problem .ps-label { color: rgba(255,255,255,0.35); }
+.ps-card-solution .ps-label { color: var(--light); }
+.ps-text { font-size: 12px; line-height: 1.75; }
+.ps-card-problem .ps-text { color: rgba(255,255,255,0.7); }
+.ps-card-solution .ps-text { color: var(--ink2); }
+.ps-arrow {
+  display: flex; justify-content: center;
+  background: var(--off); border-left: 1px solid var(--rule); border-right: 1px solid var(--rule);
+  padding: 0;
+}
+.ps-arrow svg { width: 18px; height: 18px; color: var(--dash); }
+
+
+/* ══════════════════════════════
+   PAGE 2 — FEATURES (CORE CAPABILITIES)
+══════════════════════════════ */
+
+.features-body { flex: 1; display: flex; flex-direction: column; }
+.page-heading-block { padding: 26px 56px 22px; border-bottom: 1px solid var(--rule); }
+.page-title { font-size: 20px; font-weight: 700; letter-spacing: -0.4px; color: var(--ink); margin-bottom: 3px; }
+.page-subtitle { font-size: 12px; color: var(--muted); }
+.feat-list { flex: 1; padding: 0 56px; }
+.feat-row { display: flex; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.feat-row:last-child { border-bottom: none; }
+.feat-num { font-size: 10px; font-weight: 700; color: #D8D8D8; width: 28px; flex-shrink: 0; padding-top: 1px; letter-spacing: 0.04em; }
+.feat-content { flex: 1; }
+.feat-title { font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: -0.1px; margin-bottom: 4px; }
+.feat-desc { font-size: 11.5px; color: var(--muted); line-height: 1.75; }
+
+
+/* ══════════════════════════════
+   PAGE 3 — TECH STACK (with logos)
+══════════════════════════════ */
+
+.tech-body {
+  flex: 1; padding: 30px 56px 0;
+  display: flex; flex-direction: column; gap: 26px;
+}
+.tech-group-heading {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink);
+  padding-bottom: 10px; border-bottom: 1.5px solid var(--ink);
+}
+.tech-list { display: flex; flex-direction: column; }
+.tech-row {
+  display: flex; align-items: flex-start; gap: 0; padding: 13px 0; border-bottom: 1px solid var(--rule);
+}
+.tech-row:last-child { border-bottom: none; }
+.tech-logo {
+  width: 32px; height: 32px; flex-shrink: 0; margin-right: 14px; margin-top: 2px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 6px; overflow: hidden;
+}
+.tech-logo img {
+  width: 28px; height: 28px; object-fit: contain;
+}
+.tech-logo-badge {
+  width: 32px; height: 32px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; color: white; letter-spacing: -0.3px;
+}
+.tech-name-col { width: 155px; flex-shrink: 0; padding-right: 20px; }
+.tech-name { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+.tech-role { font-size: 9.5px; font-weight: 500; color: var(--light); text-transform: uppercase; letter-spacing: 0.08em; }
+.tech-desc { flex: 1; font-size: 12px; color: var(--muted); line-height: 1.7; padding-top: 1px; }
+.compliance { background: var(--off); border: 1px solid var(--rule); padding: 14px 18px; margin-top: auto; }
+.compliance-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--light); margin-bottom: 5px; }
+.compliance-text { font-size: 11.5px; color: var(--muted); line-height: 1.7; }
+.compliance-text strong { color: var(--ink2); font-weight: 600; }
+
+
+/* ══════════════════════════════
+   PAGE 4 — FLOW DIAGRAM (REDESIGNED)
+══════════════════════════════ */
+
+.flow-page-body {
+  flex: 1; padding: 24px 44px 0;
+  display: flex; flex-direction: column;
+}
+.flow-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1.5px solid var(--ink);
+}
+.flow-header-left {}
+.flow-header-title { font-size: 20px; font-weight: 700; letter-spacing: -0.4px; color: var(--ink); margin-bottom: 2px; }
+.flow-header-sub { font-size: 11px; color: var(--muted); }
+.flow-legend {
+  display: flex; gap: 14px; align-items: center;
+}
+.flow-legend-item { display: flex; align-items: center; gap: 5px; }
+.flow-legend-swatch {
+  width: 18px; height: 8px; border-radius: 2px;
+}
+.flow-legend-text { font-size: 8.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--light); }
+
+/* ── MAIN FLOW COLUMN ── */
+.flow {
+  display: flex; flex-direction: column; align-items: center;
+  flex: 1; gap: 0; position: relative;
+}
+
+/* Vertical spine line behind everything */
+.flow::before {
+  content: '';
+  position: absolute;
+  top: 18px; bottom: 18px;
+  left: 50%;
+  width: 0;
+  border-left: 1.5px dashed #E0E0E0;
+  z-index: 0;
+}
+
+/* ── TERMINAL (start / end) ── */
+.fl-terminal {
+  position: relative; z-index: 1;
+  background: var(--ink); color: white;
+  border-radius: 100px; padding: 8px 30px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.fl-terminal svg { width: 13px; height: 13px; stroke: rgba(255,255,255,0.5); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── CONNECTOR ── */
+.fl-conn {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center;
+}
+.fl-conn-line {
+  width: 0; height: 14px;
+  border-left: 1.5px dashed var(--dash);
+}
+.fl-conn-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--dash); flex-shrink: 0;
+}
+.fl-conn-sm .fl-conn-line { height: 8px; }
+
+/* Connector with label chip */
+.fl-conn-label {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+}
+.fl-chip {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--white);
+  background: var(--ink); border-radius: 100px;
+  padding: 3px 12px; margin: 2px 0;
+}
+
+/* ── SECTION CARD ── */
+.fl-section {
+  position: relative; z-index: 1;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.fl-section-head {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 16px;
+  color: var(--white);
+}
+.fl-section-head svg { width: 14px; height: 14px; stroke: rgba(255,255,255,0.5); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fl-section-head span {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+}
+.fl-section-num {
+  margin-left: auto;
+  font-size: 8px; font-weight: 600; color: rgba(255,255,255,0.3);
+  letter-spacing: 0.05em;
+}
+.fl-section-body { padding: 12px; background: white; }
+
+/* Section color themes */
+.fl-sec-auth .fl-section-head  { background: #1A1A2E; }
+.fl-sec-disc .fl-section-head  { background: var(--ink); }
+.fl-sec-out .fl-section-head   { background: #2A2A2A; }
+.fl-sec-comm .fl-section-head  { background: #0F0F0F; }
+
+/* ── BRANCH GRID ── */
+.fl-branches-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.fl-branches-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; }
+
+.fl-branch { padding: 0 10px; display: flex; flex-direction: column; gap: 0; }
+.fl-branch + .fl-branch { border-left: 1px solid var(--rule); }
+
+.fl-branch-head {
+  font-size: 8.5px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 8px; padding-bottom: 6px;
+  border-bottom: 1.5px solid var(--rule);
+  text-align: center;
+}
+
+/* ── STEP NODE ── */
+.fl-step {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--off); border: 1px solid var(--rule);
+  border-radius: 6px; padding: 6px 10px;
+}
+.fl-step-num {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--ink); color: white;
+  font-size: 8.5px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.fl-step-text {
+  font-size: 10px; font-weight: 500; color: var(--ink2); line-height: 1.35;
+}
+
+/* Full-width process step */
+.fl-process {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--off); border: 1px solid var(--rule);
+  border-radius: 6px; padding: 6px 12px; width: 100%;
+}
+.fl-process .fl-step-num { background: var(--ink); }
+
+/* Mini connector inside branches */
+.fl-mini { display: flex; flex-direction: column; align-items: center; }
+.fl-mini-line { width: 0; border-left: 1px dashed var(--dash); height: 6px; }
+.fl-mini-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--dash); }
+
+/* ── OUTCOME STYLES ── */
+.fl-branch-accepted .fl-branch-head { color: var(--ink); border-bottom-color: var(--ink); }
+.fl-branch-accepted .fl-step { border-color: var(--ink); background: white; }
+.fl-branch-accepted .fl-step-num { background: var(--ink); }
+
+.fl-branch-declined .fl-branch-head { color: var(--dash); }
+.fl-branch-declined .fl-step { border-style: dashed; border-color: var(--dash); background: white; }
+.fl-branch-declined .fl-step-num { background: var(--dash); }
+.fl-branch-declined .fl-step-text { color: var(--light); }
+
+/* ── COMM CARDS ── */
+.fl-comm-card {
+  display: flex; flex-direction: column; align-items: center; gap: 0;
+  text-align: center;
+}
+.fl-comm-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--ink); display: flex; align-items: center; justify-content: center;
+  margin-bottom: 7px;
+}
+.fl-comm-icon svg { width: 14px; height: 14px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fl-comm-title { font-size: 9.5px; font-weight: 700; color: var(--ink); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
+.fl-comm-items { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+.fl-comm-item {
+  font-size: 9.5px; color: var(--muted); line-height: 1.4;
+  background: var(--off); border-radius: 4px; padding: 5px 8px;
+}
+
+
+/* ══════════════════════════════
+   PAGE 5 — SCREEN BREAKDOWN
+══════════════════════════════ */
+
+.screens-body {
+  flex: 1; padding: 28px 56px 0;
+  display: flex; flex-direction: column; gap: 18px;
+}
+.screen-group { display: flex; flex-direction: column; }
+.screen-group-label {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink);
+  padding-bottom: 9px; border-bottom: 1.5px solid var(--ink);
+}
+.screen-grid { display: grid; grid-template-columns: 1fr 1fr; }
+.screen-row { display: flex; padding: 7px 0; border-bottom: 1px solid var(--rule); }
+.screen-row:nth-child(odd)  { border-right: 1px solid var(--rule); padding-right: 16px; }
+.screen-row:nth-child(even) { padding-left: 16px; }
+.screen-num { font-size: 9px; font-weight: 700; color: #D4D4D4; width: 28px; flex-shrink: 0; padding-top: 1px; }
+.screen-name { font-size: 11.5px; font-weight: 600; color: var(--ink); margin-bottom: 1px; }
+.screen-desc { font-size: 10.5px; color: var(--muted); line-height: 1.5; }
+
+
+/* ══════════════════════════════
+   PAGE 6 — COST BREAKDOWN
+══════════════════════════════ */
+
+.cost-body {
+  flex: 1; padding: 30px 56px 0;
+  display: flex; flex-direction: column; gap: 28px;
+}
+
+.cost-section { display: flex; flex-direction: column; }
+
+.cost-section-heading {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink);
+  padding-bottom: 10px; border-bottom: 1.5px solid var(--ink);
+  margin-bottom: 0;
+}
+
+.cost-table { width: 100%; border-collapse: collapse; }
+.cost-table th {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--light);
+  text-align: left; padding: 12px 0 8px;
+  border-bottom: 1px solid var(--rule);
+}
+.cost-table th:last-child { text-align: right; }
+.cost-table td {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+.cost-table tr:last-child td { border-bottom: none; }
+.cost-item { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+.cost-detail { font-size: 11px; color: var(--muted); line-height: 1.6; }
+.cost-amount {
+  font-size: 15px; font-weight: 700; color: var(--ink);
+  text-align: right; letter-spacing: -0.3px;
+}
+.cost-freq {
+  font-size: 9.5px; font-weight: 500; color: var(--light);
+  text-align: right; text-transform: uppercase; letter-spacing: 0.06em;
+  margin-top: 2px;
+}
+
+.cost-example-box {
+  background: var(--off);
+  border: 1px solid var(--rule);
+  padding: 20px 24px;
+  border-radius: 0;
+}
+.cost-example-heading {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--light); margin-bottom: 14px;
+}
+.cost-example-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid var(--rule);
+}
+.cost-example-row:last-child { border-bottom: none; }
+.cost-example-label { font-size: 12px; color: var(--ink2); }
+.cost-example-label strong { font-weight: 600; color: var(--ink); }
+.cost-example-value { font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: -0.2px; }
+
+.cost-note {
+  background: var(--off); border: 1px solid var(--rule);
+  padding: 14px 18px; margin-top: auto;
+}
+.cost-note-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--light); margin-bottom: 5px;
+}
+.cost-note-text {
+  font-size: 11.5px; color: var(--muted); line-height: 1.7;
+}
+.cost-note-text strong { color: var(--ink2); font-weight: 600; }
+
+/* ══════════════════════════════
+   PAGE 8 — DEVELOPMENT INVESTMENT
+══════════════════════════════ */
+
+.invest-body {
+  flex: 1; padding: 30px 56px 0;
+  display: flex; flex-direction: column; gap: 24px;
+}
+
+.invest-hero {
+  background: var(--ink); border-radius: 10px;
+  padding: 32px 36px; display: flex; align-items: center;
+  justify-content: space-between; gap: 30px;
+}
+.invest-hero-left {}
+.invest-hero-eyebrow {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.16em;
+  text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 8px;
+}
+.invest-hero-amount {
+  font-size: 44px; font-weight: 800; color: #FFF;
+  letter-spacing: -2px; line-height: 1; margin-bottom: 6px;
+}
+.invest-hero-amount span {
+  font-size: 22px; font-weight: 600; letter-spacing: -0.5px; vertical-align: baseline;
+}
+.invest-hero-sub {
+  font-size: 12px; color: rgba(255,255,255,0.45); font-weight: 400;
+}
+.invest-hero-right {
+  display: flex; flex-direction: column; gap: 6px; align-items: flex-end;
+}
+.invest-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 100px; padding: 5px 14px;
+}
+.invest-badge svg {
+  width: 12px; height: 12px; stroke: rgba(255,255,255,0.4);
+  fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+.invest-badge span {
+  font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.65);
+  letter-spacing: 0.02em;
+}
+
+.invest-team {
+  display: flex; flex-direction: column;
+}
+.invest-team-heading {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink);
+  padding-bottom: 10px; border-bottom: 1.5px solid var(--ink);
+  margin-bottom: 0;
+}
+.invest-team-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+}
+.invest-member {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.invest-member:nth-child(odd) { border-right: 1px solid var(--rule); padding-right: 20px; }
+.invest-member:nth-child(even) { padding-left: 20px; }
+.invest-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--ink); display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.invest-avatar svg {
+  width: 18px; height: 18px; stroke: white; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+.invest-member-name { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+.invest-member-role { font-size: 10px; color: var(--muted); line-height: 1.4; }
+
+.invest-value-heading {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink);
+  padding-bottom: 10px; border-bottom: 1.5px solid var(--ink);
+  margin-bottom: 0;
+}
+.invest-value-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+}
+.invest-value-card {
+  padding: 16px 14px; border-right: 1px solid var(--rule);
+  text-align: center;
+}
+.invest-value-card:last-child { border-right: none; }
+.invest-value-num {
+  font-size: 28px; font-weight: 800; color: var(--ink);
+  letter-spacing: -1.5px; line-height: 1; margin-bottom: 4px;
+}
+.invest-value-label {
+  font-size: 9.5px; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+
+.invest-includes { display: flex; flex-direction: column; }
+.invest-includes-heading {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink);
+  padding-bottom: 10px; border-bottom: 1.5px solid var(--ink);
+  margin-bottom: 0;
+}
+.invest-includes-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.invest-inc-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.invest-inc-item:nth-child(odd) { border-right: 1px solid var(--rule); padding-right: 16px; }
+.invest-inc-item:nth-child(even) { padding-left: 16px; }
+.invest-inc-icon {
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+  background: var(--off); border: 1px solid var(--rule);
+  display: flex; align-items: center; justify-content: center; margin-top: 1px;
+}
+.invest-inc-icon svg {
+  width: 11px; height: 11px; stroke: var(--ink); fill: none;
+  stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+}
+.invest-inc-text { font-size: 11.5px; font-weight: 500; color: var(--ink2); line-height: 1.4; }
+.invest-inc-text strong { font-weight: 700; color: var(--ink); }
+
+.invest-note {
+  background: var(--off); border: 1px solid var(--rule);
+  padding: 14px 18px; margin-top: auto;
+}
+.invest-note-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--light); margin-bottom: 5px;
+}
+.invest-note-text {
+  font-size: 11.5px; color: var(--muted); line-height: 1.7;
+}
+.invest-note-text strong { color: var(--ink2); font-weight: 600; }
+
+
+.src-link {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 9px; font-weight: 500; color: var(--light);
+  text-decoration: none; margin-left: 6px;
+  border-bottom: 1px dotted var(--dash);
+  padding-bottom: 0.5px;
+  transition: color 0.15s, border-color 0.15s;
+  vertical-align: middle;
+}
+.src-link:hover { color: var(--ink); border-bottom-color: var(--ink); }
+.src-link svg {
+  width: 10px; height: 10px; flex-shrink: 0;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+
+
+@media print { body { background: white; } }
+@page { size: A4; margin: 0; }
+
+</style>
+</head>
+<body>
+
+
+<!-- ═══════════════ PAGE 1 — COVER ═══════════════ -->
+<div class="page">
+  <div class="hero">
+    <div class="hero-eyebrow">Project Overview &nbsp;·&nbsp; Confidential &nbsp;·&nbsp; March 2026</div>
+    <div class="hero-name">Looping</div>
+    <div class="hero-tagline">Discover real, verified people physically near you — connect, chat, and call instantly.</div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-label">Platforms</div><div class="stat-value">iOS and Android</div></div>
+      <div class="stat"><div class="stat-label">Timeline</div><div class="stat-value">14 Weeks</div></div>
+      <div class="stat"><div class="stat-label">Expected Launch</div><div class="stat-value">Mid August 2026</div></div>
+    </div>
+  </div>
+
+  <div class="desc-section">
+    <div class="sec-label">About the Project</div>
+    <div class="desc-heading">What is Looping?</div>
+    <div class="desc-body">
+      <p><strong>Looping</strong> is a mobile application that allows users to discover and connect with real, verified people who are physically present near them. Whether you are at a college campus, a networking event, a co-working space, or a cafe, Looping shows you who is around you on a live radar screen and lets you reach out to them instantly.</p>
+      <p>Every user is required to verify their identity using government-issued documents through DigiLocker. Once two users connect, they can chat in real time and make voice and video calls — all within the app, without exchanging personal contact details.</p>
+      <p>Looping is a trust-first networking tool built around real-world presence, verified identity, and privacy you control completely.</p>
+    </div>
+    <div class="ps-stack">
+      <div class="ps-card ps-card-problem">
+        <div class="ps-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="ps-body">
+          <div class="ps-label">The Problem</div>
+          <div class="ps-text">People are surrounded by potential connections every day but have no safe, verified way to reach out. Existing apps rely on online networks, not real-world presence.</div>
+        </div>
+      </div>
+      <div class="ps-arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+      </div>
+      <div class="ps-card ps-card-solution">
+        <div class="ps-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="ps-body">
+          <div class="ps-label">The Solution</div>
+          <div class="ps-text">Looping uses GPS and identity verification to show a live view of verified users nearby, giving people a trusted and private way to connect in person.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-left">Looping &nbsp;·&nbsp; Project Overview &nbsp;·&nbsp; Confidential</span>
+    <span class="footer-right">01 / 08</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════ PAGE 2 — CORE CAPABILITIES ═══════════════ -->
+<div class="page">
+  <div class="top-bar">
+    <span class="bar-brand">Looping</span>
+    <span class="bar-label">Core Capabilities</span>
+  </div>
+
+  <div class="features-body">
+    <div class="page-heading-block">
+      <div class="page-title">Core Capabilities</div>
+      <div class="page-subtitle">Everything the app does, explained clearly.</div>
+    </div>
+    <div class="feat-list">
+
+      <div class="feat-row">
+        <span class="feat-num">01</span>
+        <div class="feat-content">
+          <div class="feat-title">GPS-Based Proximity Discovery</div>
+          <div class="feat-desc">An animated radar screen shows verified users within 500 metres of your location in real time. Nearby users appear as bubbles on the radar, each showing their name and distance. The closer they are, the closer their bubble appears to the centre. Tap any bubble to view a mini profile and send a connection request.</div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <span class="feat-num">02</span>
+        <div class="feat-content">
+          <div class="feat-title">User Registration and Login</div>
+          <div class="feat-desc">New users complete a guided 5-step sign-up covering profile details, phone OTP verification, purpose selection, social account linking and privacy preferences. Returning users log in with phone OTP, email and password, or biometric authentication such as fingerprint or Face ID.</div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <span class="feat-num">03</span>
+        <div class="feat-content">
+          <div class="feat-title">Connection Requests</div>
+          <div class="feat-desc">Tap a radar bubble to send a connection request. The receiver is notified instantly and can accept or decline. Unanswered requests expire after 48 hours. Once accepted, a private chat and calling are unlocked between both users. Any user can be blocked or reported instantly.</div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <span class="feat-num">04</span>
+        <div class="feat-content">
+          <div class="feat-title">Real-Time Private Chat</div>
+          <div class="feat-desc">Messages are delivered instantly. The chat supports text, emoji and image sharing. Every message shows a delivery state: sent, delivered and read, similar to WhatsApp's tick system. A live typing indicator appears when the other person is writing. Screenshots are disabled inside the chat screen.</div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <span class="feat-num">05</span>
+        <div class="feat-content">
+          <div class="feat-title">Voice and Video Calls</div>
+          <div class="feat-desc">High-quality 1-to-1 voice and video calls powered by Twilio. Video supports picture-in-picture, allowing you to minimise the call into a small floating window while continuing to use your phone. A full call history with type, duration and missed call details is saved in the app.</div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <span class="feat-num">06</span>
+        <div class="feat-content">
+          <div class="feat-title">Identity Verification</div>
+          <div class="feat-desc">Looping uses DigiLocker, the Government of India's official platform, to verify each user's Aadhaar, PAN card, college ID or office ID. Verified documents appear as badges on the profile. Raw Aadhaar numbers are never stored — only the last four digits are kept, in compliance with the Aadhaar Act 2016.</div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <span class="feat-num">07</span>
+        <div class="feat-content">
+          <div class="feat-title">Privacy and Safety Controls</div>
+          <div class="feat-desc">Users control what others see: name, phone, email, occupation, education and social accounts. Discovery mode can be switched off at any time, making the user completely invisible. Any user can be blocked or reported. Fully compliant with India's Digital Personal Data Protection Act 2023.</div>
+        </div>
+      </div>
+
+      <div class="feat-row">
+        <span class="feat-num">08</span>
+        <div class="feat-content">
+          <div class="feat-title">Push Notifications and Alerts</div>
+          <div class="feat-desc">Instant notifications for connection requests, accepted requests, new messages and incoming calls. Incoming calls trigger a native phone-call-style screen on both iPhone and Android even when the app is closed. All notification preferences are individually manageable from the settings screen.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-left">Looping &nbsp;·&nbsp; Project Overview &nbsp;·&nbsp; Confidential</span>
+    <span class="footer-right">02 / 08</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════ PAGE 3 — TECH STACK ═══════════════ -->
+<div class="page">
+  <div class="top-bar">
+    <span class="bar-brand">Looping</span>
+    <span class="bar-label">Technology Stack</span>
+  </div>
+
+  <div class="tech-body">
+    <div>
+      <div class="page-title">Technology We Are Using</div>
+      <div class="page-subtitle">Proven, industry-standard tools trusted by the world's leading technology companies.</div>
+    </div>
+
+    <div>
+      <div class="tech-group-heading">Mobile Application — iOS and Android</div>
+      <div class="tech-list">
+        <div class="tech-row">
+          <div class="tech-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg" alt="Flutter"></div>
+          <div class="tech-name-col"><div class="tech-name">Flutter</div><div class="tech-role">Cross-platform framework</div></div>
+          <div class="tech-desc">Built by Google. One codebase that runs natively on both iPhone and Android with the same quality and performance. No need to build two separate apps. Used by BMW, eBay and Alibaba.</div>
+        </div>
+        <div class="tech-row">
+          <div class="tech-logo"><div class="tech-logo-badge" style="background:#F22F46;">T</div></div>
+          <div class="tech-name-col"><div class="tech-name">Twilio</div><div class="tech-role">Voice, video and SMS</div></div>
+          <div class="tech-desc">The world's most trusted communications platform. Powers all voice calls, video calls and the SMS one-time password sent during phone verification. Used by Airbnb, Netflix and Uber.</div>
+        </div>
+        <div class="tech-row">
+          <div class="tech-logo"><div class="tech-logo-badge" style="background:#004B87;">D</div></div>
+          <div class="tech-name-col"><div class="tech-name">DigiLocker</div><div class="tech-role">Identity verification</div></div>
+          <div class="tech-desc">The official digital document platform of the Government of India. Verifies Aadhaar, PAN card and other government-issued IDs directly inside the app, ensuring every user is real and identifiable.</div>
+        </div>
+        <div class="tech-row">
+          <div class="tech-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg" alt="Google"></div>
+          <div class="tech-name-col"><div class="tech-name">Google and Meta OAuth</div><div class="tech-role">Social account linking</div></div>
+          <div class="tech-desc">Allows users to securely connect their Google, Instagram and Facebook accounts to their profile as an additional layer of social verification and trust.</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="tech-group-heading">Backend Server and Database</div>
+      <div class="tech-list">
+        <div class="tech-row">
+          <div class="tech-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="Node.js"></div>
+          <div class="tech-name-col"><div class="tech-name">Node.js</div><div class="tech-role">Application server</div></div>
+          <div class="tech-desc">Powers the entire backend of Looping. Handles all requests from the app, manages user data, processes real-time messaging and executes business logic. Used by LinkedIn, PayPal and Uber.</div>
+        </div>
+        <div class="tech-row">
+          <div class="tech-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="TypeScript"></div>
+          <div class="tech-name-col"><div class="tech-name">TypeScript</div><div class="tech-role">Programming language</div></div>
+          <div class="tech-desc">A strongly-typed version of JavaScript that catches errors before the app goes live, making the server significantly more reliable and maintainable. Used by Microsoft, Airbnb and Slack.</div>
+        </div>
+        <div class="tech-row">
+          <div class="tech-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" alt="PostgreSQL"></div>
+          <div class="tech-name-col"><div class="tech-name">PostgreSQL</div><div class="tech-role">Secure database</div></div>
+          <div class="tech-desc">All user information, messages, call history and connections are stored securely and encrypted. Also powers the GPS proximity search that finds nearby users. Trusted by Instagram, Apple and Spotify.</div>
+        </div>
+        <div class="tech-row">
+          <div class="tech-logo"><div class="tech-logo-badge" style="background:#1A73E8;">E2E</div></div>
+          <div class="tech-name-col"><div class="tech-name">E2E Networks</div><div class="tech-role">Cloud hosting — primary</div></div>
+          <div class="tech-desc">An Indian cloud infrastructure provider that keeps all user data within India for data sovereignty compliance and delivers low response times for Indian users.</div>
+        </div>
+        <div class="tech-row">
+          <div class="tech-logo"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="AWS"></div>
+          <div class="tech-name-col"><div class="tech-name">Amazon Web Services</div><div class="tech-role">Cloud hosting — alternative</div></div>
+          <div class="tech-desc">The world's largest cloud platform used as an alternative option. AWS can scale Looping from hundreds to millions of users. Mumbai region for Indian data compliance.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="compliance">
+      <div class="compliance-label">Legal and Data Compliance</div>
+      <div class="compliance-text">Fully compliant with the <strong>Digital Personal Data Protection Act (DPDPA) 2023</strong> and the <strong>Aadhaar Act 2016</strong>. All data encrypted in transit and at rest. Users can delete their account and all data at any time.</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-left">Looping &nbsp;·&nbsp; Project Overview &nbsp;·&nbsp; Confidential</span>
+    <span class="footer-right">03 / 08</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════ PAGE 4 — USER FLOW (REDESIGNED) ═══════════════ -->
+<div class="page">
+  <div class="top-bar">
+    <span class="bar-brand">Looping</span>
+    <span class="bar-label">User Flow</span>
+  </div>
+
+  <div class="flow-page-body">
+    <div class="flow-header">
+      <div class="flow-header-left">
+        <div class="flow-header-title">User Flow</div>
+        <div class="flow-header-sub">End-to-end journey from app launch through to communication.</div>
+      </div>
+      <div class="flow-legend">
+        <div class="flow-legend-item"><div class="flow-legend-swatch" style="background:#1A1A2E;"></div><span class="flow-legend-text">Auth</span></div>
+        <div class="flow-legend-item"><div class="flow-legend-swatch" style="background:var(--ink);"></div><span class="flow-legend-text">Discovery</span></div>
+        <div class="flow-legend-item"><div class="flow-legend-swatch" style="background:#2A2A2A;"></div><span class="flow-legend-text">Outcome</span></div>
+        <div class="flow-legend-item"><div class="flow-legend-swatch" style="background:#0F0F0F;"></div><span class="flow-legend-text">Comms</span></div>
+      </div>
+    </div>
+
+    <div class="flow">
+
+      <!-- ── START ── -->
+      <div class="fl-terminal">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+        App Launch
+      </div>
+
+      <div class="fl-conn"><div class="fl-conn-line"></div><div class="fl-conn-dot"></div></div>
+
+      <!-- ── 1. AUTHENTICATION ── -->
+      <div class="fl-section fl-sec-auth">
+        <div class="fl-section-head">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>Authentication</span>
+          <span class="fl-section-num">Phase 1</span>
+        </div>
+        <div class="fl-section-body">
+          <div class="fl-branches-2">
+
+            <div class="fl-branch">
+              <div class="fl-branch-head">New User — Registration</div>
+              <div class="fl-step"><span class="fl-step-num">1</span><span class="fl-step-text">Profile Setup</span></div>
+              <div class="fl-mini"><div class="fl-mini-line"></div><div class="fl-mini-dot"></div></div>
+              <div class="fl-step"><span class="fl-step-num">2</span><span class="fl-step-text">Contact and Phone OTP</span></div>
+              <div class="fl-mini"><div class="fl-mini-line"></div><div class="fl-mini-dot"></div></div>
+              <div class="fl-step"><span class="fl-step-num">3</span><span class="fl-step-text">Purpose Selection</span></div>
+              <div class="fl-mini"><div class="fl-mini-line"></div><div class="fl-mini-dot"></div></div>
+              <div class="fl-step"><span class="fl-step-num">4</span><span class="fl-step-text">Social Account Linking</span></div>
+              <div class="fl-mini"><div class="fl-mini-line"></div><div class="fl-mini-dot"></div></div>
+              <div class="fl-step"><span class="fl-step-num">5</span><span class="fl-step-text">Privacy and Terms</span></div>
+            </div>
+
+            <div class="fl-branch">
+              <div class="fl-branch-head">Returning User — Login</div>
+              <div class="fl-step"><span class="fl-step-num">1</span><span class="fl-step-text">Enter Phone or Email</span></div>
+              <div class="fl-mini"><div class="fl-mini-line"></div><div class="fl-mini-dot"></div></div>
+              <div class="fl-step"><span class="fl-step-num">2</span><span class="fl-step-text">OTP or Password</span></div>
+              <div class="fl-mini"><div class="fl-mini-line"></div><div class="fl-mini-dot"></div></div>
+              <div class="fl-step"><span class="fl-step-num">3</span><span class="fl-step-text">Biometric Login — optional</span></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="fl-conn-label">
+        <div class="fl-conn"><div class="fl-conn-line"></div></div>
+        <div class="fl-chip">Both paths merge</div>
+        <div class="fl-conn"><div class="fl-conn-line"></div><div class="fl-conn-dot"></div></div>
+      </div>
+
+      <!-- ── 2. DISCOVERY ── -->
+      <div class="fl-section fl-sec-disc">
+        <div class="fl-section-head">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="22" y1="22" x2="16.65" y2="16.65"/></svg>
+          <span>Discovery</span>
+          <span class="fl-section-num">Phase 2</span>
+        </div>
+        <div class="fl-section-body" style="display:flex;flex-direction:column;align-items:center;gap:0;">
+          <div class="fl-process"><span class="fl-step-num">1</span><span class="fl-step-text">Radar activates — GPS detects current location</span></div>
+          <div class="fl-mini"><div class="fl-mini-line"></div><div class="fl-mini-dot"></div></div>
+          <div class="fl-process"><span class="fl-step-num">2</span><span class="fl-step-text">Verified users within 500 m appear as bubbles on radar</span></div>
+          <div class="fl-mini"><div class="fl-mini-line"></div><div class="fl-mini-dot"></div></div>
+          <div class="fl-process"><span class="fl-step-num">3</span><span class="fl-step-text">Tap any bubble to open user's mini profile card</span></div>
+          <div class="fl-mini"><div class="fl-mini-line"></div><div class="fl-mini-dot"></div></div>
+          <div class="fl-process"><span class="fl-step-num">4</span><span class="fl-step-text">Send a Connection Request — other user notified instantly</span></div>
+          <div class="fl-mini"><div class="fl-mini-line"></div><div class="fl-mini-dot"></div></div>
+          <div class="fl-process"><span class="fl-step-num">5</span><span class="fl-step-text">Request expires in 48 hours if unanswered</span></div>
+        </div>
+      </div>
+
+      <div class="fl-conn"><div class="fl-conn-line"></div><div class="fl-conn-dot"></div></div>
+
+      <!-- ── 3. CONNECTION OUTCOME ── -->
+      <div class="fl-section fl-sec-out">
+        <div class="fl-section-head">
+          <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          <span>Connection Outcome</span>
+          <span class="fl-section-num">Phase 3</span>
+        </div>
+        <div class="fl-section-body">
+          <div class="fl-branches-2">
+
+            <div class="fl-branch fl-branch-accepted">
+              <div class="fl-branch-head">Accepted</div>
+              <div class="fl-step"><span class="fl-step-num">&#10003;</span><span class="fl-step-text">Chat and Calling Unlocked</span></div>
+              <div class="fl-mini"><div class="fl-mini-line"></div><div class="fl-mini-dot"></div></div>
+              <div class="fl-step"><span class="fl-step-num">&#10003;</span><span class="fl-step-text">Both users can message and call</span></div>
+            </div>
+
+            <div class="fl-branch fl-branch-declined">
+              <div class="fl-branch-head">Declined or Expired</div>
+              <div class="fl-step"><span class="fl-step-num">&#10005;</span><span class="fl-step-text">Connection Request Closed</span></div>
+              <div class="fl-mini"><div class="fl-mini-line" style="border-color:#E8E8E8;"></div><div class="fl-mini-dot" style="background:#E8E8E8;"></div></div>
+              <div class="fl-step"><span class="fl-step-num">&#8635;</span><span class="fl-step-text">Can send a new request later</span></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="fl-conn-label">
+        <div class="fl-conn"><div class="fl-conn-line"></div></div>
+        <div class="fl-chip">If accepted</div>
+        <div class="fl-conn"><div class="fl-conn-line"></div><div class="fl-conn-dot"></div></div>
+      </div>
+
+      <!-- ── 4. COMMUNICATION ── -->
+      <div class="fl-section fl-sec-comm">
+        <div class="fl-section-head">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Communication</span>
+          <span class="fl-section-num">Phase 4</span>
+        </div>
+        <div class="fl-section-body">
+          <div class="fl-branches-3">
+
+            <div class="fl-branch">
+              <div class="fl-comm-card">
+                <div class="fl-comm-icon">
+                  <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <div class="fl-comm-title">Text Chat</div>
+                <div class="fl-comm-items">
+                  <div class="fl-comm-item">Messages, images and emoji</div>
+                  <div class="fl-comm-item">Read receipts and typing indicator</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="fl-branch">
+              <div class="fl-comm-card">
+                <div class="fl-comm-icon">
+                  <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </div>
+                <div class="fl-comm-title">Voice Call</div>
+                <div class="fl-comm-items">
+                  <div class="fl-comm-item">HD call powered by Twilio</div>
+                  <div class="fl-comm-item">Mute, speaker and end controls</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="fl-branch">
+              <div class="fl-comm-card">
+                <div class="fl-comm-icon">
+                  <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                </div>
+                <div class="fl-comm-title">Video Call</div>
+                <div class="fl-comm-items">
+                  <div class="fl-comm-item">Full video powered by Twilio</div>
+                  <div class="fl-comm-item">Picture-in-Picture multitasking</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-left">Looping &nbsp;·&nbsp; Project Overview &nbsp;·&nbsp; Confidential</span>
+    <span class="footer-right">04 / 08</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════ PAGE 5 — SCREEN BREAKDOWN ═══════════════ -->
+<div class="page">
+  <div class="top-bar">
+    <span class="bar-brand">Looping</span>
+    <span class="bar-label">Screen Breakdown</span>
+  </div>
+
+  <div class="screens-body">
+    <div>
+      <div class="page-title">Screen Breakdown</div>
+      <div class="page-subtitle" style="margin-bottom:0;">29 screens across 5 functional sections.</div>
+    </div>
+
+    <div class="screen-group">
+      <div class="screen-group-label">Authentication and Onboarding</div>
+      <div class="screen-grid">
+        <div class="screen-row"><span class="screen-num">S01</span><div><div class="screen-name">Splash Screen</div><div class="screen-desc">App launch screen shown briefly on startup.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S02</span><div><div class="screen-name">Login Screen</div><div class="screen-desc">Phone OTP or email and password login.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S03</span><div><div class="screen-name">OTP Verification</div><div class="screen-desc">Enter the 6-digit code sent via SMS.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S04</span><div><div class="screen-name">Forgot Password</div><div class="screen-desc">Reset password via email link.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S05</span><div><div class="screen-name">Registration — Step 1</div><div class="screen-desc">Profile: name, date of birth, occupation, photo.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S06</span><div><div class="screen-name">Registration — Step 2</div><div class="screen-desc">Contact and identity: phone OTP, email, ID type.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S07</span><div><div class="screen-name">Registration — Step 3</div><div class="screen-desc">Purpose selection and education details.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S08</span><div><div class="screen-name">Registration — Step 4</div><div class="screen-desc">Social account linking and DigiLocker documents.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S09</span><div><div class="screen-name">Registration — Step 5</div><div class="screen-desc">Privacy field toggles and terms acceptance.</div></div></div>
+      </div>
+    </div>
+
+    <div class="screen-group">
+      <div class="screen-group-label">Discovery and Connections</div>
+      <div class="screen-grid">
+        <div class="screen-row"><span class="screen-num">S10</span><div><div class="screen-name">Home / Radar Screen</div><div class="screen-desc">Animated radar showing nearby user bubbles live.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S11</span><div><div class="screen-name">Mini Profile Card</div><div class="screen-desc">Overlay showing user details on bubble tap.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S12</span><div><div class="screen-name">Connection Request Sent</div><div class="screen-desc">Confirmation after sending a connection request.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S13</span><div><div class="screen-name">Incoming Request Screen</div><div class="screen-desc">Accept or decline an incoming connection request.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S14</span><div><div class="screen-name">Contacts List</div><div class="screen-desc">All accepted connections listed in one place.</div></div></div>
+      </div>
+    </div>
+
+    <div class="screen-group">
+      <div class="screen-group-label">Chat</div>
+      <div class="screen-grid">
+        <div class="screen-row"><span class="screen-num">S15</span><div><div class="screen-name">Chat List</div><div class="screen-desc">All active conversations sorted by most recent.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S16</span><div><div class="screen-name">Chat Conversation</div><div class="screen-desc">1-to-1 chat with read receipts and typing indicator.</div></div></div>
+      </div>
+    </div>
+
+    <div class="screen-group">
+      <div class="screen-group-label">Voice and Video Calls</div>
+      <div class="screen-grid">
+        <div class="screen-row"><span class="screen-num">S17</span><div><div class="screen-name">Outgoing Voice Call</div><div class="screen-desc">Calling screen while waiting for the other user.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S18</span><div><div class="screen-name">Incoming Voice Call</div><div class="screen-desc">Native call screen with accept and decline.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S19</span><div><div class="screen-name">Active Voice Call</div><div class="screen-desc">Live call with mute, speaker and end controls.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S20</span><div><div class="screen-name">Outgoing Video Call</div><div class="screen-desc">Camera preview while connecting to the other user.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S21</span><div><div class="screen-name">Incoming Video Call</div><div class="screen-desc">Native screen with accept and decline options.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S22</span><div><div class="screen-name">Active Video Call</div><div class="screen-desc">Live video with PiP, camera flip and mute controls.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S23</span><div><div class="screen-name">Call History</div><div class="screen-desc">Log of all calls: type, duration and missed status.</div></div></div>
+      </div>
+    </div>
+
+    <div class="screen-group">
+      <div class="screen-group-label">Profile and Settings</div>
+      <div class="screen-grid">
+        <div class="screen-row"><span class="screen-num">S24</span><div><div class="screen-name">My Profile</div><div class="screen-desc">View own profile, verification badges and social links.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S25</span><div><div class="screen-name">Edit Profile</div><div class="screen-desc">Update name, photo, occupation and all fields.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S26</span><div><div class="screen-name">App Settings</div><div class="screen-desc">Master settings hub with all configuration options.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S27</span><div><div class="screen-name">Privacy Settings</div><div class="screen-desc">Toggle visibility of each profile field individually.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S28</span><div><div class="screen-name">Notification Settings</div><div class="screen-desc">Enable or disable individual notification types.</div></div></div>
+        <div class="screen-row"><span class="screen-num">S29</span><div><div class="screen-name">Block and Report</div><div class="screen-desc">Block a user or submit a report with a written reason.</div></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-left">Looping &nbsp;·&nbsp; Project Overview &nbsp;·&nbsp; Confidential</span>
+    <span class="footer-right">05 / 08</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════ PAGE 6 — COST BREAKDOWN (PART 1) ═══════════════ -->
+<div class="page">
+  <div class="top-bar">
+    <span class="bar-brand">Looping</span>
+    <span class="bar-label">Cost Breakdown</span>
+  </div>
+
+  <div class="cost-body">
+    <div>
+      <div class="page-title">Operational Cost Breakdown</div>
+      <div class="page-subtitle">Recurring and one-time costs for all third-party services, hosting, and app store publishing.</div>
+    </div>
+
+    <!-- TWILIO COSTS -->
+    <div class="cost-section">
+      <div class="cost-section-heading">Twilio — Voice, Video and SMS</div>
+      <table class="cost-table">
+        <thead>
+          <tr>
+            <th style="width:50%;">Item</th>
+            <th style="width:28%;">Details</th>
+            <th>Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="cost-item">Video Calls — Peer-to-Peer <a href="https://www.twilio.com/en-us/video/pricing" target="_blank" class="src-link"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>source</a></div>
+              <div class="cost-detail">1-to-1 video calls use Twilio's Peer-to-Peer rooms. No per-minute charges apply for P2P rooms with up to 10 participants.</div>
+            </td>
+            <td><div class="cost-detail">1:1 video calls<br>Up to 10 participants</div></td>
+            <td>
+              <div class="cost-amount" style="color:#2E7D32;">Free</div>
+              <div class="cost-freq">&nbsp;</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="cost-item">Voice Calls — VoIP <a href="https://www.twilio.com/en-us/voice/pricing/us" target="_blank" class="src-link"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>source</a></div>
+              <div class="cost-detail">In-app voice calls using Twilio's Client SDK. Charged per minute per call leg. A 1:1 call has 2 legs.</div>
+            </td>
+            <td><div class="cost-detail">Per minute<br>Per call leg</div></td>
+            <td>
+              <div class="cost-amount">$0.004</div>
+              <div class="cost-freq">Per min</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="cost-item">SMS OTP — India <a href="https://www.twilio.com/en-us/sms/pricing/in" target="_blank" class="src-link"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>source</a></div>
+              <div class="cost-detail">One-time password sent via SMS during phone number verification. Charged per message segment sent to Indian mobile numbers.</div>
+            </td>
+            <td><div class="cost-detail">Per SMS segment<br>India destination</div></td>
+            <td>
+              <div class="cost-amount">$0.083</div>
+              <div class="cost-freq">Per SMS</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TWILIO EXAMPLE -->
+    <div class="cost-example-box">
+      <div class="cost-example-heading">Usage Examples — Twilio</div>
+      <div class="cost-example-row">
+        <div class="cost-example-label"><strong>1:1 Video Call — 10 min</strong></div>
+        <div class="cost-example-value" style="color:#2E7D32;">$0.00</div>
+      </div>
+      <div class="cost-example-row">
+        <div class="cost-example-label"><strong>1:1 Voice Call — 10 min</strong> &nbsp; (2 legs &times; 10 min &times; $0.004)</div>
+        <div class="cost-example-value">$0.08</div>
+      </div>
+      <div class="cost-example-row">
+        <div class="cost-example-label"><strong>1 OTP Verification</strong> &nbsp; (1 SMS to India)</div>
+        <div class="cost-example-value">$0.083</div>
+      </div>
+    </div>
+
+    <!-- APP STORE COSTS -->
+    <div class="cost-section">
+      <div class="cost-section-heading">App Store Publishing Fees</div>
+      <table class="cost-table">
+        <thead>
+          <tr>
+            <th style="width:50%;">Platform</th>
+            <th style="width:28%;">Billing</th>
+            <th>Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="cost-item">Apple App Store <a href="https://developer.apple.com/programs/" target="_blank" class="src-link"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>source</a></div>
+              <div class="cost-detail">Apple Developer Program membership required to publish and maintain apps on the App Store for iPhone and iPad.</div>
+            </td>
+            <td><div class="cost-detail">Annual renewal<br>Required every year</div></td>
+            <td>
+              <div class="cost-amount">$99</div>
+              <div class="cost-freq">Per year</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="cost-item">Google Play Store <a href="https://support.google.com/googleplay/android-developer/answer/6112435" target="_blank" class="src-link"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>source</a></div>
+              <div class="cost-detail">Google Play Developer account registration fee. One-time payment to publish apps on Android.</div>
+            </td>
+            <td><div class="cost-detail">One-time payment<br>Lifetime access</div></td>
+            <td>
+              <div class="cost-amount">$25</div>
+              <div class="cost-freq">Lifetime</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cost-note">
+      <div class="cost-note-label">Note</div>
+      <div class="cost-note-text">All rates verified from official pricing pages as of April 2026. Click <strong>source</strong> next to any item to view the official documentation. Twilio P2P video is free for 1:1 calls. Voice is billed per call leg per minute. SMS rates apply to Indian mobile numbers.</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-left">Looping &nbsp;·&nbsp; Project Overview &nbsp;·&nbsp; Confidential</span>
+    <span class="footer-right">06 / 08</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════ PAGE 7 — COST BREAKDOWN (PART 2) ═══════════════ -->
+<div class="page">
+  <div class="top-bar">
+    <span class="bar-brand">Looping</span>
+    <span class="bar-label">Cost Breakdown — Continued</span>
+  </div>
+
+  <div class="cost-body">
+    <div>
+      <div class="page-title">Hosting, Verification and Other Services</div>
+      <div class="page-subtitle">Cloud infrastructure, identity verification, and services included at no additional cost.</div>
+    </div>
+
+    <!-- E2E NETWORKS -->
+    <div class="cost-section">
+      <div class="cost-section-heading">E2E Networks — Cloud Hosting (India)</div>
+      <table class="cost-table">
+        <thead>
+          <tr>
+            <th style="width:50%;">Component</th>
+            <th style="width:28%;">Configuration</th>
+            <th>Est. Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="cost-item">Application Server <a href="https://www.e2enetworks.com/pricing" target="_blank" class="src-link"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>source</a></div>
+              <div class="cost-detail">Node.js backend hosted on an E2E C3 compute node. Handles all API requests, real-time messaging and business logic.</div>
+            </td>
+            <td><div class="cost-detail">4 vCPU, 8 GB RAM<br>100 GB SSD</div></td>
+            <td>
+              <div class="cost-amount">~&#8377;2,300</div>
+              <div class="cost-freq">Per month</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="cost-item">Managed PostgreSQL <a href="https://calculator.e2enetworks.com/" target="_blank" class="src-link"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>source</a></div>
+              <div class="cost-detail">Managed database service with automated backups, SSL and maintenance. Stores all user data, messages and call logs.</div>
+            </td>
+            <td><div class="cost-detail">2 vCPU, 4 GB RAM<br>Managed DBaaS</div></td>
+            <td>
+              <div class="cost-amount">~&#8377;3,500</div>
+              <div class="cost-freq">Per month</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="cost-item">Object and Block Storage</div>
+              <div class="cost-detail">Block storage for database volumes and object storage for user-uploaded media such as profile photos and shared images.</div>
+            </td>
+            <td><div class="cost-detail">50 GB block + 50 GB object</div></td>
+            <td>
+              <div class="cost-amount">~&#8377;425</div>
+              <div class="cost-freq">Per month</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cost-example-box">
+      <div class="cost-example-heading">Estimated Monthly Hosting — E2E Networks (Starter)</div>
+      <div class="cost-example-row">
+        <div class="cost-example-label">App Server + Database + Storage</div>
+        <div class="cost-example-value">~&#8377;6,200/mo</div>
+      </div>
+      <div class="cost-example-row">
+        <div class="cost-example-label">+ 18% GST</div>
+        <div class="cost-example-value">~&#8377;7,300/mo</div>
+      </div>
+      <div class="cost-example-row">
+        <div class="cost-example-label" style="font-size:10px;color:var(--light);">Suitable for up to ~10,000 daily active users. Scales up as needed.</div>
+        <div class="cost-example-label"></div>
+      </div>
+    </div>
+
+    <!-- DIGILOCKER -->
+    <div class="cost-section">
+      <div class="cost-section-heading">DigiLocker — Identity Verification</div>
+      <table class="cost-table">
+        <thead>
+          <tr>
+            <th style="width:50%;">Item</th>
+            <th style="width:28%;">Details</th>
+            <th>Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="cost-item">Document Verification via API <a href="https://apisetu.gov.in/digilocker" target="_blank" class="src-link"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>source</a></div>
+              <div class="cost-detail">Aadhaar, PAN card and other government ID verification through a third-party DigiLocker API provider. Charged per successful verification call.</div>
+            </td>
+            <td><div class="cost-detail">Per verification<br>Via API provider</div></td>
+            <td>
+              <div class="cost-amount">&#8377;2 – &#8377;10</div>
+              <div class="cost-freq">Per call</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FREE SERVICES -->
+    <div class="cost-section">
+      <div class="cost-section-heading">Included at No Cost</div>
+      <table class="cost-table">
+        <thead>
+          <tr>
+            <th style="width:50%;">Service</th>
+            <th style="width:28%;">Provider</th>
+            <th>Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="cost-item">Push Notifications <a href="https://firebase.google.com/pricing" target="_blank" class="src-link"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>source</a></div>
+              <div class="cost-detail">Unlimited push notifications on iOS and Android. No caps on message volume.</div>
+            </td>
+            <td><div class="cost-detail">Firebase Cloud<br>Messaging (FCM)</div></td>
+            <td>
+              <div class="cost-amount" style="color:#2E7D32;">Free</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="cost-item">Maps and GPS Location <a href="https://developers.google.com/maps/billing-and-pricing/pricing-india" target="_blank" class="src-link"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>source</a></div>
+              <div class="cost-detail">Map display is free and unlimited on mobile. GPS uses the device's native hardware at no cost. Geocoding is free for up to 70,000 requests per month in India.</div>
+            </td>
+            <td><div class="cost-detail">Google Maps SDK<br>Device GPS</div></td>
+            <td>
+              <div class="cost-amount" style="color:#2E7D32;">Free</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="cost-item">1:1 Video Calls <a href="https://www.twilio.com/en-us/video/pricing" target="_blank" class="src-link"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>source</a></div>
+              <div class="cost-detail">Peer-to-Peer video rooms have no per-minute charge for 1-to-1 calls between two users.</div>
+            </td>
+            <td><div class="cost-detail">Twilio Video<br>P2P Rooms</div></td>
+            <td>
+              <div class="cost-amount" style="color:#2E7D32;">Free</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cost-note">
+      <div class="cost-note-label">Note</div>
+      <div class="cost-note-text">E2E Networks prices are estimates based on published configurations and exclude 18% GST. Committed plans offer 10–40% savings. DigiLocker pricing varies by API provider — exact rates confirmed during integration. Click <strong>source</strong> next to any item to view official documentation.</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-left">Looping &nbsp;·&nbsp; Project Overview &nbsp;·&nbsp; Confidential</span>
+    <span class="footer-right">07 / 08</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════ PAGE 8 — DEVELOPMENT INVESTMENT ═══════════════ -->
+<div class="page">
+  <div class="top-bar">
+    <span class="bar-brand">Looping</span>
+    <span class="bar-label">Development Investment</span>
+  </div>
+
+  <div class="invest-body">
+
+    <!-- HERO PRICE BLOCK -->
+    <div class="invest-hero">
+      <div class="invest-hero-left">
+        <div class="invest-hero-eyebrow">Total Development Cost</div>
+        <div class="invest-hero-amount"><span>&#8377;</span>2,37,000</div>
+        <div class="invest-hero-sub">Flat fee — No GST, No CGST, No hidden charges.</div>
+      </div>
+      <div class="invest-hero-right">
+        <div class="invest-badge">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>14 Weeks Delivery</span>
+        </div>
+        <div class="invest-badge">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>2 Dedicated Developers</span>
+        </div>
+        <div class="invest-badge">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>No Tax Applied</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEAM COMPOSITION -->
+    <div class="invest-team">
+      <div class="invest-team-heading">Development Team</div>
+      <div class="invest-team-grid">
+        <div class="invest-member">
+          <div class="invest-avatar">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <div class="invest-member-name">Lead Developer</div>
+            <div class="invest-member-role">Full-stack development, architecture, API design, database, deployment and code review.</div>
+          </div>
+        </div>
+        <div class="invest-member">
+          <div class="invest-avatar">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <div class="invest-member-name">Assistant Developer</div>
+            <div class="invest-member-role">UI implementation, testing, integration support and feature development alongside the lead.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VALUE METRICS -->
+    <div>
+      <div class="invest-value-heading">What Your Investment Covers</div>
+      <div class="invest-value-grid">
+        <div class="invest-value-card">
+          <div class="invest-value-num">29</div>
+          <div class="invest-value-label">Screens Built</div>
+        </div>
+        <div class="invest-value-card">
+          <div class="invest-value-num">8</div>
+          <div class="invest-value-label">Core Features</div>
+        </div>
+        <div class="invest-value-card">
+          <div class="invest-value-num">2</div>
+          <div class="invest-value-label">Platforms</div>
+        </div>
+        <div class="invest-value-card">
+          <div class="invest-value-num">14</div>
+          <div class="invest-value-label">Weeks Delivery</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHAT'S INCLUDED -->
+    <div class="invest-includes">
+      <div class="invest-includes-heading">Everything Included in This Price</div>
+      <div class="invest-includes-grid">
+        <div class="invest-inc-item">
+          <div class="invest-inc-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="invest-inc-text"><strong>Flutter app</strong> for both iOS and Android from a single codebase</div>
+        </div>
+        <div class="invest-inc-item">
+          <div class="invest-inc-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="invest-inc-text"><strong>Complete backend</strong> — Node.js server, PostgreSQL database and API</div>
+        </div>
+        <div class="invest-inc-item">
+          <div class="invest-inc-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="invest-inc-text"><strong>Real-time chat</strong> with read receipts, typing indicator and image sharing</div>
+        </div>
+        <div class="invest-inc-item">
+          <div class="invest-inc-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="invest-inc-text"><strong>Voice and video calling</strong> powered by Twilio with PiP support</div>
+        </div>
+        <div class="invest-inc-item">
+          <div class="invest-inc-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="invest-inc-text"><strong>GPS radar discovery</strong> — live proximity detection within 500 metres</div>
+        </div>
+        <div class="invest-inc-item">
+          <div class="invest-inc-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="invest-inc-text"><strong>DigiLocker verification</strong> — Aadhaar, PAN and government ID integration</div>
+        </div>
+        <div class="invest-inc-item">
+          <div class="invest-inc-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="invest-inc-text"><strong>Push notifications</strong> and native incoming call alerts on both platforms</div>
+        </div>
+        <div class="invest-inc-item">
+          <div class="invest-inc-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="invest-inc-text"><strong>App store deployment</strong> — published on Apple App Store and Google Play</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="invest-note">
+      <div class="invest-note-label">Transparent Pricing</div>
+      <div class="invest-note-text">The quoted amount of <strong>&#8377;2,37,000</strong> is a flat, all-inclusive development fee. There is <strong>no GST, no CGST, and no additional tax</strong> applied. Two developers will be dedicated full-time to this project for the entire 14-week duration. Third-party service costs such as Twilio, hosting and app store fees are separate operational expenses detailed on the previous pages.</div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span class="footer-left">Looping &nbsp;·&nbsp; Project Overview &nbsp;·&nbsp; Confidential</span>
+    <span class="footer-right">08 / 08</span>
+  </div>
+</div>
+
+
+</body>
+</html>

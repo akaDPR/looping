@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Looping - Project Timeline & Overview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            padding: 40px;
+            background: #f9f9f9;
+        }
+        
+        .document-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 60px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .cover {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 0;
+            border-bottom: 4px solid #2563eb;
+        }
+        
+        .cover .logo {
+            font-size: 48px;
+            font-weight: 700;
+            color: #2563eb;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+        
+        .cover h1 {
+            font-size: 28px;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+        
+        .cover .subtitle {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+        
+        .cover .meta {
+            display: inline-block;
+            background: #f1f5f9;
+            padding: 15px 30px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .cover .meta p {
+            color: #475569;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        
+        h2 {
+            color: #2563eb;
+            font-size: 24px;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        h3 {
+            color: #1e293b;
+            font-size: 18px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        p {
+            color: #475569;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .highlight-box {
+            background: #dbeafe;
+            border-left: 4px solid #2563eb;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 4px;
+        }
+        
+        .highlight-box h3 {
+            color: #1e40af;
+            margin-top: 0;
+        }
+        
+        .highlight-box p {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 4px;
+        }
+        
+        .warning-box h3 {
+            color: #92400e;
+            margin-top: 0;
+        }
+        
+        .warning-box p, .warning-box li {
+            color: #78350f;
+        }
+        
+        .success-box {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 4px;
+        }
+        
+        .success-box h3 {
+            color: #065f46;
+            margin-top: 0;
+        }
+        
+        .success-box p {
+            color: #065f46;
+        }
+        
+        .timeline {
+            margin: 30px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #2563eb;
+        }
+        
+        .timeline-week {
+            min-width: 120px;
+            font-weight: 700;
+            color: #2563eb;
+            font-size: 18px;
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-content h4 {
+            color: #1e293b;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-content p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-milestone {
+            background: #2563eb;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        thead {
+            background: #2563eb;
+            color: white;
+        }
+        
+        thead th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        tbody td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+            font-size: 14px;
+        }
+        
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+        
+        ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 15px 0;
+        }
+        
+        ul li {
+            padding: 8px 0 8px 30px;
+            position: relative;
+            color: #475569;
+        }
+        
+        ul li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #2563eb;
+            font-size: 16px;
+        }
+        
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .req-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 3px solid #2563eb;
+        }
+        
+        .req-card h4 {
+            color: #1e293b;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .req-card p {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        
+        .footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 2px solid #e2e8f0;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .document-container {
+                box-shadow: none;
+                padding: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="document-container">
+        <!-- Cover Page -->
+        <div class="cover">
+            <div class="logo">LOOPING</div>
+            <h1>Project Timeline & Development Plan</h1>
+            <p class="subtitle">GPS-Based Proximity Social Networking App</p>
+            <div class="meta">
+                <p><strong>Version:</strong> 1.1 | <strong>Date:</strong> March 26, 2026</p>
+                <p><strong>Platform:</strong> Flutter (iOS + Android) + Node.js Backend</p>
+                <p><strong>Budget:</strong> ₹2,50,000 | <strong>Duration:</strong> 14 Weeks</p>
+            </div>
+        </div>
+
+        <!-- Project Overview -->
+        <h2>📱 Project Overview</h2>
+        <p><strong>Looping</strong> is a proximity-based social networking mobile application that enables users to discover, connect, and communicate with verified people nearby using GPS location services.</p>
+        
+        <div class="highlight-box">
+            <h3>Core Value Proposition</h3>
+            <p>Find and connect with verified, real people in your physical vicinity — at events, campuses, co-working spaces, and public places.</p>
+        </div>
+
+        <h3>What We're Building</h3>
+        <ul>
+            <li><strong>20 Core Features</strong> including authentication, nearby discovery, real-time chat, voice & video calling</li>
+            <li><strong>29 Screens</strong> with polished UI/UX matching your design system</li>
+            <li><strong>GPS-based discovery</strong> using MongoDB geospatial queries (500m radius)</li>
+            <li><strong>Real-time chat</strong> powered by Socket.io</li>
+            <li><strong>Voice & Video calling</strong> via Zegocloud/Agora SDK</li>
+            <li><strong>Privacy features</strong> including screenshot protection, field visibility controls</li>
+            <li><strong>Document verification</strong> via DigiLocker (Aadhaar, PAN)</li>
+            <li><strong>iOS & Android deployment</strong> to App Store and Play Store</li>
+        </ul>
+
+        <!-- Timeline -->
+        <h2>📅 14-Week Development Timeline</h2>
+        <p><strong>Project Start:</strong> Week of April 1, 2026<br>
+        <strong>Expected Launch:</strong> July 3, 2026</p>
+
+        <div class="timeline">
+            <h3 style="color: #2563eb; margin-top: 30px;">PHASE 1: Foundation (Weeks 1–3)</h3>
+            
+            <div class="timeline-item">
+                <div class="timeline-week">Week 1</div>
+                <div class="timeline-content">
+                    <h4>Backend & Authentication Setup</h4>
+                    <p><strong>Tasks:</strong> Node.js/Express project scaffold, MongoDB configuration, JWT authentication, Twilio SMS OTP integration</p>
+                    <p><strong>Deliverable:</strong> ✅ Login working (email/password + phone OTP)</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-week">Week 2</div>
+                <div class="timeline-content">
+                    <h4>Registration Flow (Steps 1-3)</h4>
+                    <p><strong>Tasks:</strong> Profile setup, contact & identity, purpose & education screens, profile photo upload to S3/Cloudinary</p>
+                    <p><strong>Deliverable:</strong> ✅ 3-step registration working</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-week">Week 3</div>
+                <div class="timeline-content">
+                    <h4>Registration Flow (Steps 4-5) & OAuth</h4>
+                    <p><strong>Tasks:</strong> Social account linking (Google, Instagram, Facebook), DigiLocker prep, privacy toggles, terms acceptance</p>
+                    <p><strong>Deliverable:</strong> ✅ Full registration flow complete</p>
+                </div>
+            </div>
+
+            <div class="timeline-milestone">
+                🎯 Milestone 1 Demo: User can register (5 steps), login, view profile
+            </div>
+
+            <h3 style="color: #2563eb; margin-top: 40px;">PHASE 2: Discovery & Chat (Weeks 4–7)</h3>
+            
+            <div class="timeline-item">
+                <div class="timeline-week">Week 4</div>
+                <div class="timeline-content">
+                    <h4>Home Screen & GPS Setup</h4>
+                    <p><strong>Tasks:</strong> Home dashboard, bottom navigation, GPS location service integration, permissions handling</p>
+                    <p><strong>Deliverable:</strong> ✅ Home + navigation shell</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-week">Week 5</div>
+                <div class="timeline-content">
+                    <h4>Nearby Discovery (GPS-based)</h4>
+                    <p><strong>Tasks:</strong> GPS-based nearby API (MongoDB $nearSphere query), animated radar UI, user bubbles with distance calculation</p>
+                    <p><strong>Deliverable:</strong> ✅ Radar discovers and displays nearby users</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-week">Week 6</div>
+                <div class="timeline-content">
+                    <h4>Connection Request System</h4>
+                    <p><strong>Tasks:</strong> Send/accept/reject connection requests, push notifications via FCM, connection status management</p>
+                    <p><strong>Deliverable:</strong> ✅ Users can connect</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-week">Week 7</div>
+                <div class="timeline-content">
+                    <h4>Real-time Chat</h4>
+                    <p><strong>Tasks:</strong> Socket.io chat implementation, message states (sent/delivered/read), typing indicator, image messages</p>
+                    <p><strong>Deliverable:</strong> ✅ Full 1:1 chat working</p>
+                </div>
+            </div>
+
+            <div class="timeline-milestone">
+                🎯 Milestone 2 Demo: Complete flow — Discover → Connect → Chat
+            </div>
+
+            <h3 style="color: #2563eb; margin-top: 40px;">PHASE 3: Voice & Video Calls (Weeks 8–11)</h3>
+            
+            <div class="timeline-item">
+                <div class="timeline-week">Week 8</div>
+                <div class="timeline-content">
+                    <h4>Voice Calling Setup</h4>
+                    <p><strong>Tasks:</strong> Zegocloud SDK integration, voice call initiation, FCM call signaling, token generation on backend</p>
+                    <p><strong>Deliverable:</strong> ✅ Voice calls ring</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-week">Week 9</div>
+                <div class="timeline-content">
+                    <h4>Voice Call UI & Controls</h4>
+                    <p><strong>Tasks:</strong> Incoming/active/ended screens, mute/speaker/hold controls, CallKit (iOS) & ConnectionService (Android)</p>
+                    <p><strong>Deliverable:</strong> ✅ Voice calls complete end-to-end</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-week">Week 10</div>
+                <div class="timeline-content">
+                    <h4>Video Calling</h4>
+                    <p><strong>Tasks:</strong> Video call UI (dark theme), camera controls, PiP self-view, flip camera, video mute</p>
+                    <p><strong>Deliverable:</strong> ✅ Video calls working with PiP</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-week">Week 11</div>
+                <div class="timeline-content">
+                    <h4>Call Polish & History</h4>
+                    <p><strong>Tasks:</strong> Call history log, missed call notifications, edge case handling, network fallback (audio-only)</p>
+                    <p><strong>Deliverable:</strong> ✅ Calls polished and production-ready</p>
+                </div>
+            </div>
+
+            <div class="timeline-milestone">
+                🎯 Milestone 3 Demo: Full voice + video calling between users
+            </div>
+
+            <h3 style="color: #2563eb; margin-top: 40px;">PHASE 4: Polish & Launch (Weeks 12–14)</h3>
+            
+            <div class="timeline-item">
+                <div class="timeline-week">Week 12</div>
+                <div class="timeline-content">
+                    <h4>Security & Safety Features</h4>
+                    <p><strong>Tasks:</strong> DigiLocker integration, screenshot protection (FLAG_SECURE), block/report user functionality</p>
+                    <p><strong>Deliverable:</strong> ✅ Security features complete</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-week">Week 13</div>
+                <div class="timeline-content">
+                    <h4>Final Features & UI Polish</h4>
+                    <p><strong>Tasks:</strong> Settings screens, contact list, notifications list, animation matching showcase designs</p>
+                    <p><strong>Deliverable:</strong> ✅ Feature complete app</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-week">Week 14</div>
+                <div class="timeline-content">
+                    <h4>Testing & Store Deployment</h4>
+                    <p><strong>Tasks:</strong> Device testing (5+ Android, 2+ iOS), bug fixes, App Store & Play Store submissions</p>
+                    <p><strong>Deliverable:</strong> 🚀 <strong>APP LAUNCHED</strong></p>
+                </div>
+            </div>
+
+            <div class="timeline-milestone">
+                🎉 Milestone 4: App live on Play Store + App Store
+            </div>
+        </div>
+
+        <!-- Technical Stack -->
+        <h2>🛠 Technical Stack</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Technology</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Mobile App</strong></td>
+                    <td>Flutter (Dart), Riverpod (state management)</td>
+                </tr>
+                <tr>
+                    <td><strong>Backend</strong></td>
+                    <td>Node.js, Express.js, Socket.io (real-time)</td>
+                </tr>
+                <tr>
+                    <td><strong>Database</strong></td>
+                    <td>MongoDB with 2dsphere geospatial indexes</td>
+                </tr>
+                <tr>
+                    <td><strong>Authentication</strong></td>
+                    <td>JWT tokens, Twilio (SMS OTP), Nodemailer (email)</td>
+                </tr>
+                <tr>
+                    <td><strong>File Storage</strong></td>
+                    <td>Cloudinary or AWS S3</td>
+                </tr>
+                <tr>
+                    <td><strong>Push Notifications</strong></td>
+                    <td>Firebase Cloud Messaging (FCM via firebase-admin SDK)</td>
+                </tr>
+                <tr>
+                    <td><strong>Voice/Video Calling</strong></td>
+                    <td>Zegocloud or Agora SDK</td>
+                </tr>
+                <tr>
+                    <td><strong>Hosting</strong></td>
+                    <td>VPS / Railway / Render</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Budget Breakdown -->
+        <h2>💰 Budget Breakdown (₹2,50,000)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th style="text-align: right;">Amount (INR)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Development (14 weeks)</td>
+                    <td style="text-align: right; font-weight: 600;">₹1,47,700</td>
+                </tr>
+                <tr>
+                    <td>Apple Developer Account (1 year)</td>
+                    <td style="text-align: right;">₹8,700</td>
+                </tr>
+                <tr>
+                    <td>Google Play Developer Account (one-time)</td>
+                    <td style="text-align: right;">₹2,100</td>
+                </tr>
+                <tr>
+                    <td>Voice/Video SDK (6 months)</td>
+                    <td style="text-align: right;">₹15,000</td>
+                </tr>
+                <tr>
+                    <td>Node.js Server Hosting (6 months)</td>
+                    <td style="text-align: right;">₹10,000</td>
+                </tr>
+                <tr>
+                    <td>Domain & Privacy Policy Hosting</td>
+                    <td style="text-align: right;">₹1,500</td>
+                </tr>
+                <tr>
+                    <td>Legal: Privacy Policy (India-compliant)</td>
+                    <td style="text-align: right;">₹25,000</td>
+                </tr>
+                <tr>
+                    <td>App Store Screenshots & Assets</td>
+                    <td style="text-align: right;">₹10,000</td>
+                </tr>
+                <tr>
+                    <td>Testing (BrowserStack + devices)</td>
+                    <td style="text-align: right;">₹5,000</td>
+                </tr>
+                <tr>
+                    <td>Miscellaneous (icons, fonts, certificates)</td>
+                    <td style="text-align: right;">₹5,000</td>
+                </tr>
+                <tr>
+                    <td>Contingency Buffer</td>
+                    <td style="text-align: right;">₹20,000</td>
+                </tr>
+                <tr style="background: #f1f5f9; font-weight: 700;">
+                    <td><strong>GRAND TOTAL</strong></td>
+                    <td style="text-align: right; color: #2563eb; font-size: 18px;"><strong>₹2,50,000</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Client Requirements -->
+        <h2>✅ Client Requirements (Action Items)</h2>
+        <div class="warning-box">
+            <h3>⚠️ Required Before Week 1</h3>
+            <ul style="list-style: disc; padding-left: 30px;">
+                <li>Provide branding assets (logo files, color palette, fonts)</li>
+                <li>Provide content for Terms & Conditions and Privacy Policy text</li>
+            </ul>
+        </div>
+
+        <div class="warning-box">
+            <h3>🛒 Client Must Purchase (Before Week 12)</h3>
+            <ul style="list-style: disc; padding-left: 30px;">
+                <li><strong>Apple Developer Account</strong> — ₹8,700/year (included in budget)<br>
+                    <small>Required for iOS deployment. Must be active before Week 12.</small></li>
+                <li><strong>Google Play Developer Account</strong> — ₹2,100 one-time (included in budget)<br>
+                    <small>Required for Android deployment. Must be active before Week 14.</small></li>
+            </ul>
+        </div>
+
+        <div class="requirements-grid">
+            <div class="req-card">
+                <h4>🔐 DigiLocker API Access</h4>
+                <p>Client must apply for DigiLocker API partnership (takes 4-6 weeks). Developer will handle integration once approved.</p>
+            </div>
+
+            <div class="req-card">
+                <h4>🔗 OAuth App Setup</h4>
+                <p>Create developer accounts and OAuth apps for Instagram, Facebook, Google. Instructions will be provided.</p>
+            </div>
+
+            <div class="req-card">
+                <h4>🖥️ Server Environment</h4>
+                <p>Node.js server (VPS/Railway/Render) must be provisioned before Week 1. Can assist with setup.</p>
+            </div>
+
+            <div class="req-card">
+                <h4>💾 MongoDB Database</h4>
+                <p>MongoDB Atlas cluster or self-hosted instance must be ready before Week 1. Free tier sufficient initially.</p>
+            </div>
+        </div>
+
+        <!-- Payment Schedule -->
+        <h2>💳 Payment Schedule</h2>
+        <div class="success-box">
+            <h3>Payment Milestones</h3>
+            <p><strong>50% Advance (₹1,25,000)</strong> — Due before project start (Week 0)<br>
+            Payment enables: Team onboarding, infrastructure setup, development kickoff</p>
+
+            <p style="margin-top: 15px;"><strong>30% Mid-Project (₹75,000)</strong> — After Milestone 2 Demo (Week 7)<br>
+            Payment upon: Discover → Connect → Chat flow working end-to-end</p>
+
+            <p style="margin-top: 15px;"><strong>20% Final Payment (₹50,000)</strong> — Upon Store Submission (Week 14)<br>
+            Payment upon: Apps submitted to App Store and Play Store</p>
+        </div>
+
+        <!-- Post-Launch -->
+        <h2>🚀 Post-Launch Support</h2>
+        <h3>Included (First 30 Days)</h3>
+        <ul>
+            <li>Critical bug fixes</li>
+            <li>App Store / Play Store rejection fixes</li>
+            <li>Performance issues on supported devices</li>
+        </ul>
+
+        <h3>Not Included (Quoted Separately)</h3>
+        <ul style="list-style: disc; padding-left: 30px; color: #64748b;">
+            <li>New feature development</li>
+            <li>Server infrastructure maintenance beyond free tier</li>
+            <li>Design changes or redesigns</li>
+            <li>Admin web dashboard</li>
+            <li>Analytics integration</li>
+        </ul>
+        <p><strong>Monthly Maintenance Retainer:</strong> Estimated ₹15,000-25,000/month (optional)</p>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>LOOPING — Project Timeline & Development Plan</strong></p>
+            <p>Version 1.1 | March 26, 2026</p>
+            <p style="margin-top: 20px; color: #94a3b8; font-size: 11px;">
+                This document serves as a project overview. Full technical specifications available in the Project Scope Document (LOOPING-PROJECT-PLAN.md).
+            </p>
+        </div>
+    </div>
+</body>
+</html>
